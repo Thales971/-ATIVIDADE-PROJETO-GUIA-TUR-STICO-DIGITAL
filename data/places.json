@@ -1,0 +1,54 @@
+{
+    "pontos": [
+        {
+            "id": 1,
+            "nome": "Parque da Cidade",
+            "descricao": "Area verde para caminhadas e pausas ao ar livre.",
+            "imagem": "https://picsum.photos/seed/parque-da-cidade/900/600",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 2,
+            "nome": "Museu de Arte",
+            "descricao": "Museu com arte regional e exposicoes temporarias.",
+            "imagem": "https://picsum.photos/seed/museu-de-arte/900/600",
+            "localizacao": "Zona Norte",
+            "categoria": "pontos"
+        },
+        {
+            "id": 3,
+            "nome": "Mirante do Rio",
+            "descricao": "Mirante com vista panoramica da cidade.",
+            "imagem": "https://picsum.photos/seed/mirante-do-rio/900/600",
+            "localizacao": "Margem Sul",
+            "categoria": "pontos"
+        }
+    ],
+    "restaurantes": [
+        {
+            "id": 4,
+            "nome": "Sabor Local",
+            "descricao": "Comida caseira com pratos regionais.",
+            "imagem": "https://picsum.photos/seed/sabor-local/900/600",
+            "localizacao": "Centro Historico",
+            "categoria": "restaurantes"
+        },
+        {
+            "id": 5,
+            "nome": "Bistro da Praca",
+            "descricao": "Menu leve com saladas, massas e cafes.",
+            "imagem": "https://picsum.photos/seed/bistro-da-praca/900/600",
+            "localizacao": "Praca Central",
+            "categoria": "restaurantes"
+        },
+        {
+            "id": 6,
+            "nome": "Sabores do Porto",
+            "descricao": "Peixes e frutos do mar com atendimento acolhedor.",
+            "imagem": "https://picsum.photos/seed/sabores-do-porto/900/600",
+            "localizacao": "Orla",
+            "categoria": "restaurantes"
+        }
+    ]
+}

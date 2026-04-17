@@ -1,0 +1,64 @@
+TUTORIAL DE INSTALACAO E CONFIGURACAO
+Projeto: Guia Turistico Digital
+
+OBJETIVO
+Este arquivo deve ser atualizado sempre que a estrutura do projeto mudar.
+Use este guia para manter os 3 colaboradores alinhados.
+
+1) PREREQUISITOS
+- Node.js instalado.
+- Git instalado.
+- Expo Go no celular, se for testar no dispositivo.
+
+2) CLONAR O PROJETO
+- Abrir o terminal na pasta desejada.
+- Executar:
+  git clone <URL_DO_REPOSITORIO>
+- Entrar na pasta do projeto:
+  cd Guia
+
+3) INSTALACAO
+- Instalar dependencias com:
+  npm install
+
+- Se for preciso adicionar ou reinstalar bibliotecas do Expo, usar o comando padrao do projeto:
+  npx expo install @react-navigation/native @react-navigation/drawer @react-navigation/bottom-tabs @react-navigation/native-stack react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context react-native-paper react-native-vector-icons
+
+4) EXECUCAO
+- Iniciar o app com:
+  npx expo start
+
+- Se houver problema de cache:
+  npx expo start -c
+
+5) ONDE EDITAR CADA PARTE
+- Navegacao e temas: App.js
+- Tela inicial: src/screens/WelcomeScreen.js
+- Tela de lista: src/screens/HomeScreen.js
+- Tela de detalhes: src/screens/DetailsScreen.js
+- Tela sobre: src/screens/AboutScreen.js
+- Tela contato: src/screens/ContactScreen.js
+- Dados locais: data/places.json
+- Troca futura para API: data/placesRepository.js
+
+6) FLUXO PARA ALTERACOES
+- Alterou dependencias: atualizar package.json e rodar npm install.
+- Alterou dados locais: revisar data/places.json.
+- Alterou estrutura de navegacao: revisar App.js e testar o fluxo inteiro.
+- Alterou textos do projeto: atualizar este tutorial e o README.
+
+7) CHECKLIST RAPIDO ANTES DE SUBIR
+- O app abre sem erros.
+- A Drawer mostra Início, Sobre e Contato.
+- As Tabs mostram Pontos Turisticos e Restaurantes.
+- A tela de detalhes recebe route.params.
+- O arquivo JSON continua valido.
+
+8) PADRAO PARA FUTURAS MUDANCAS
+Sempre que o projeto mudar, atualizar:
+- README.md
+- TUTORIAL_COLABORADORES.txt
+- data/places.json se os exemplos mudarem
+- data/placesRepository.js se a origem dos dados mudar
+
+FIM
