@@ -1,64 +1,75 @@
 TUTORIAL DE INSTALACAO E CONFIGURACAO
 Projeto: Guia Turistico Digital
+Versao: beta de edicao rapida
 
 OBJETIVO
-Este arquivo deve ser atualizado sempre que a estrutura do projeto mudar.
-Use este guia para manter os 3 colaboradores alinhados.
+Este arquivo deve ser atualizado sempre que o projeto mudar.
+Use como guia unico para os 3 colaboradores.
 
-1) PREREQUISITOS
-- Node.js instalado.
-- Git instalado.
-- Expo Go no celular, se for testar no dispositivo.
+1) PRE-REQUISITOS
+- Node.js 20 ou superior.
+- Git.
+- Expo Go no celular, se for testar em device.
+- VS Code.
 
-2) CLONAR O PROJETO
-- Abrir o terminal na pasta desejada.
-- Executar:
-  git clone <URL_DO_REPOSITORIO>
-- Entrar na pasta do projeto:
-  cd Guia
+2) CLONAR E ABRIR
+- git clone <URL_DO_REPOSITORIO>
+- cd Guia
 
 3) INSTALACAO
-- Instalar dependencias com:
-  npm install
-
-- Se for preciso adicionar ou reinstalar bibliotecas do Expo, usar o comando padrao do projeto:
-  npx expo install @react-navigation/native @react-navigation/drawer @react-navigation/bottom-tabs @react-navigation/native-stack react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context react-native-paper react-native-vector-icons
+- npm install
+- Se o ambiente estiver limpo ou faltando pacotes do Expo, rode:
+  npx expo install @react-navigation/native @react-navigation/drawer @react-navigation/bottom-tabs @react-navigation/native-stack react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context react-native-paper react-native-vector-icons react-dom react-native-web babel-preset-expo
 
 4) EXECUCAO
-- Iniciar o app com:
-  npx expo start
+- npx expo start
+- npx expo start -c para limpar cache
+- npx expo start --web para validar no navegador
 
-- Se houver problema de cache:
-  npx expo start -c
+5) ESTRUTURA REAL DO PROJETO
+- App.js
+- src/screens/WelcomeScreen.js
+- src/screens/HomeScreen.js
+- src/screens/DetailsScreen.js
+- src/screens/AboutScreen.js
+- src/screens/ContactScreen.js
+- data/places.json
+- data/placesRepository.js
+- babel.config.js
+- app.json
 
-5) ONDE EDITAR CADA PARTE
-- Navegacao e temas: App.js
-- Tela inicial: src/screens/WelcomeScreen.js
-- Tela de lista: src/screens/HomeScreen.js
-- Tela de detalhes: src/screens/DetailsScreen.js
-- Tela sobre: src/screens/AboutScreen.js
-- Tela contato: src/screens/ContactScreen.js
-- Dados locais: data/places.json
+Obs: se existir uma pasta raiz screens/, ela nao e a estrutura principal agora. O codigo real fica em src/screens/.
+
+6) O QUE EDITAR EM CADA CASO
+- Navegacao, tema, Drawer, Tabs e Stack: App.js
+- Tela inicial e aceite dos termos: src/screens/WelcomeScreen.js
+- Lista de pontos e restaurantes: src/screens/HomeScreen.js
+- Tela de detalhes com route.params: src/screens/DetailsScreen.js
+- Paginas institucionais: src/screens/AboutScreen.js e src/screens/ContactScreen.js
+- Conteudo dos cards: data/places.json
 - Troca futura para API: data/placesRepository.js
 
-6) FLUXO PARA ALTERACOES
-- Alterou dependencias: atualizar package.json e rodar npm install.
-- Alterou dados locais: revisar data/places.json.
-- Alterou estrutura de navegacao: revisar App.js e testar o fluxo inteiro.
-- Alterou textos do projeto: atualizar este tutorial e o README.
+7) FLUXO DE ATUALIZACAO
+- Mudou texto: atualize data/places.json ou este tutorial.
+- Mudou visual: ajuste App.js e as telas em src/screens.
+- Mudou dependencias: atualize package.json e rode npm install.
+- Mudou a estrutura: atualize README.md e este tutorial.
+- Mudou a origem dos dados: ajuste apenas data/placesRepository.js.
 
-7) CHECKLIST RAPIDO ANTES DE SUBIR
+8) CHECKLIST ANTES DE ENVIAR
 - O app abre sem erros.
-- A Drawer mostra Início, Sobre e Contato.
-- As Tabs mostram Pontos Turisticos e Restaurantes.
-- A tela de detalhes recebe route.params.
+- A tela Welcome abre antes das Tabs.
+- O botao Seguir em frente leva para Tabs.
+- Drawer abre em Início, Sobre e Contato.
+- Lista carrega os dados do JSON.
+- Detalhes recebe place via route.params.
 - O arquivo JSON continua valido.
+- O build web funciona quando necessario.
 
-8) PADRAO PARA FUTURAS MUDANCAS
-Sempre que o projeto mudar, atualizar:
-- README.md
-- TUTORIAL_COLABORADORES.txt
-- data/places.json se os exemplos mudarem
-- data/placesRepository.js se a origem dos dados mudar
+9) PADRAO PARA FUTURAS MUDANCAS
+- Mantenha os textos curtos ate o Figma fechar.
+- Evite criar novas camadas de pasta sem necessidade.
+- Use este arquivo como fonte principal para os colaboradores.
+- Sempre que uma mudanca estrutural acontecer, atualize este tutorial no mesmo PR.
 
 FIM
