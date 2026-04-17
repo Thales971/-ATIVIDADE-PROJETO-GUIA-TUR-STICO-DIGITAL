@@ -8,7 +8,7 @@ import { createDrawerNavigator } from '@react-navigation/drawer';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { MD3LightTheme, Provider as PaperProvider } from 'react-native-paper';
-import { Ionicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import WelcomeScreen from './src/screens/WelcomeScreen';
@@ -77,10 +77,9 @@ function AppTabs() {
                     paddingTop: 6,
                 },
                 tabBarIcon: ({ color, size }) => {
-                    const iconName =
-                        route.name === 'Pontos Turísticos' ? 'home-outline' : 'star-outline';
+                    const iconName = route.name === 'Pontos Turísticos' ? 'home' : 'star';
 
-                    return <Ionicons name={iconName} size={24} color={color} />;
+                    return <Feather name={iconName} size={size} color={color} />;
                 },
                 tabBarItemStyle: {
                     paddingVertical: 2,
@@ -136,7 +135,7 @@ export default function App() {
                                 component={MainStack}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Ionicons name='home-outline' color={color} size={size} />
+                                        <Feather name='home' color={color} size={size} />
                                     ),
                                 }}
                             />
@@ -145,7 +144,7 @@ export default function App() {
                                 component={AboutScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Ionicons name='star-outline' color={color} size={size} />
+                                        <Feather name='star' color={color} size={size} />
                                     ),
                                 }}
                             />
@@ -154,11 +153,7 @@ export default function App() {
                                 component={ContactScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Ionicons
-                                            name='paper-plane-outline'
-                                            color={color}
-                                            size={size}
-                                        />
+                                        <Feather name='send' color={color} size={size} />
                                     ),
                                 }}
                             />
