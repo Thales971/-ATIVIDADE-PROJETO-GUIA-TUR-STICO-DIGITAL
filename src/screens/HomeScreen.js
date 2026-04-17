@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Platform, StyleSheet, View } from 'react-native';
+import { FlatList, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import {
     ActivityIndicator,
@@ -72,6 +72,8 @@ export default function HomeScreen({ navigation, category, title }) {
             isActive = false;
         };
     }, [category]);
+
+    const featuredPlaces = places.slice(0, 6);
 
     const openDrawer = () => {
         const drawerNavigation =
@@ -199,6 +201,43 @@ export default function HomeScreen({ navigation, category, title }) {
                     </View>
                 </View>
             </Surface>
+
+            {!loading && featuredPlaces.length > 0 ? (
+                <View style={styles.featuredSection}>
+                    <View style={styles.featuredHeader}>
+                        <Text style={styles.featuredTitle}>Destaques</Text>
+                        <Text style={styles.featuredSubtitle}>
+                            Rolagem lateral para explorar rapido
+                        </Text>
+                    </View>
+
+                    <ScrollView
+                        horizontal
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={styles.featuredRail}>
+                        {featuredPlaces.map((item, index) => (
+                            <Card
+                                key={`${item.id}-${index}`}
+                                mode='outlined'
+                                style={styles.featuredCardItem}
+                                onPress={() => openDetails(item)}>
+                                <Card.Cover
+                                    source={{ uri: item.imagem }}
+                                    style={styles.featuredCover}
+                                />
+                                <Card.Content style={styles.featuredCardContent}>
+                                    <Text style={styles.featuredCardTitle} numberOfLines={1}>
+                                        {item.nome}
+                                    </Text>
+                                    <Text style={styles.featuredCardText} numberOfLines={2}>
+                                        {item.localizacao}
+                                    </Text>
+                                </Card.Content>
+                            </Card>
+                        ))}
+                    </ScrollView>
+                </View>
+            ) : null}
 
             <Text style={styles.pageHint}>
                 Selecione um cartao para abrir a pagina de detalhes.
@@ -364,6 +403,57 @@ const createStyles = (theme) =>
             width: 1,
             height: 30,
             backgroundColor: 'rgba(17,17,17,0.08)',
+        },
+        featuredSection: {
+            marginTop: 8,
+            paddingHorizontal: 16,
+        },
+        featuredHeader: {
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+            alignItems: 'baseline',
+            marginBottom: 10,
+            paddingHorizontal: 2,
+        },
+        featuredTitle: {
+            fontFamily: brandFont,
+            fontSize: 16,
+            color: theme.colors.onSurface,
+        },
+        featuredSubtitle: {
+            fontSize: 11,
+            color: theme.colors.onSurfaceVariant,
+        },
+        featuredRail: {
+            gap: 12,
+            paddingBottom: 4,
+            paddingRight: 8,
+        },
+        featuredCardItem: {
+            width: 158,
+            borderRadius: 20,
+            overflow: 'hidden',
+            backgroundColor: theme.colors.surface,
+            borderColor: 'rgba(17,17,17,0.08)',
+            borderWidth: 1,
+        },
+        featuredCover: {
+            height: 120,
+        },
+        featuredCardContent: {
+            paddingTop: 10,
+            paddingBottom: 12,
+        },
+        featuredCardTitle: {
+            fontFamily: brandFont,
+            color: theme.colors.onSurface,
+            fontSize: 14,
+            marginBottom: 4,
+        },
+        featuredCardText: {
+            color: theme.colors.onSurfaceVariant,
+            fontSize: 11,
+            lineHeight: 15,
         },
         pageHint: {
             paddingHorizontal: 20,

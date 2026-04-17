@@ -148,20 +148,20 @@ export default function App() {
                                 }}
                             />
                             <Drawer.Screen
-                                name='Login'
-                                component={LoginScreen}
-                                options={{
-                                    drawerIcon: ({ color, size }) => (
-                                        <Feather name='log-in' color={color} size={size} />
-                                    ),
-                                }}
-                            />
-                            <Drawer.Screen
                                 name='Sobre'
                                 component={AboutScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
                                         <Feather name='info' color={color} size={size} />
+                                    ),
+                                }}
+                            />
+                            <Drawer.Screen
+                                name='Contato'
+                                component={ContactScreen}
+                                options={{
+                                    drawerIcon: ({ color, size }) => (
+                                        <Feather name='send' color={color} size={size} />
                                     ),
                                 }}
                             />

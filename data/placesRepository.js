@@ -73,7 +73,24 @@ function getOverpassQueries(category, config) {
 
 function getLocalPlaces(category) {
     const places = placesData?.[category];
-    return Array.isArray(places) ? places : [];
+    const localPlaces = Array.isArray(places) ? places : [];
+
+    return localPlaces.map((place, index) => {
+        const fallbackImage = getPlaceImage({
+            category,
+            name: place?.nome || '',
+            seed: place?.id || index,
+            ordinal: index,
+        });
+
+        return {
+            ...place,
+            imagem:
+                typeof place?.imagem === 'string' && /^https?:\/\//i.test(place.imagem)
+                    ? place.imagem
+                    : fallbackImage,
+        };
+    });
 }
 
 function getCoordinates(element) {
@@ -147,8 +164,8 @@ async function fetchNominatimJson(query, limit = 20, timeoutMs = 15000) {
     }
 }
 
-function buildFallbackImage(category, id, tags = {}, name = '') {
-    return getPlaceImage({ category, tags, name, seed: id });
+function buildFallbackImage(category, id, tags = {}, name = '', ordinal = 0) {
+    return getPlaceImage({ category, tags, name, seed: id, ordinal });
 }
 
 function buildLocationText(tags, lat, lon) {
@@ -205,7 +222,7 @@ function buildWikimediaImageUrl(wikimediaValue) {
     return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}?width=1200`;
 }
 
-function pickImage(tags, category, id, name = '') {
+function pickImage(tags, category, id, name = '', ordinal = 0) {
     if (typeof tags?.image === 'string' && /^https?:\/\//i.test(tags.image)) {
         return tags.image;
     }
@@ -216,7 +233,7 @@ function pickImage(tags, category, id, name = '') {
         return wikimediaUrl;
     }
 
-    return buildFallbackImage(category, id, tags, name);
+    return buildFallbackImage(category, id, tags, name, ordinal);
 }
 
 function normalizeName(tags, category, index) {
@@ -252,7 +269,7 @@ function normalizeNominatimName(item, category, index) {
     return `Ponto turistico ${index + 1}`;
 }
 
-function mapElementToPlace(element, category, index) {
+function mapElementToPlace(element, category, index, ordinal) {
     const tags = element?.tags || {};
     const { lat, lon } = getCoordinates(element);
     const nome = normalizeName(tags, category, index);
@@ -261,13 +278,13 @@ function mapElementToPlace(element, category, index) {
         id: `osm-${category}-${element?.type}-${element?.id}`,
         nome,
         descricao: buildDescription(tags, category),
-        imagem: pickImage(tags, category, element?.id, nome),
+        imagem: pickImage(tags, category, element?.id, nome, ordinal),
         localizacao: buildLocationText(tags, lat, lon),
         categoria: category,
     };
 }
 
-function mapNominatimItemToPlace(item, category, index) {
+function mapNominatimItemToPlace(item, category, index, ordinal) {
     const address = item?.address || {};
     const lat = Number.parseFloat(item?.lat);
     const lon = Number.parseFloat(item?.lon);
@@ -292,7 +309,8 @@ function mapNominatimItemToPlace(item, category, index) {
             category,
             item?.place_id || index,
             item?.tags || {},
-            normalizeNominatimName(item, category, index)
+            normalizeNominatimName(item, category, index),
+            ordinal
         ),
         localizacao: locationText,
         categoria: category,
@@ -313,6 +331,7 @@ async function fetchPlacesFromApi(category) {
     }
 
     const allPlaces = [];
+    let ordinal = 0;
 
     for (const query of queries) {
         try {
@@ -320,7 +339,7 @@ async function fetchPlacesFromApi(category) {
             const elements = Array.isArray(payload?.elements) ? payload.elements : [];
 
             const mappedPlaces = elements
-                .map((element, index) => mapElementToPlace(element, category, index))
+                .map((element, index) => mapElementToPlace(element, category, index, ordinal++))
                 .filter((place) => Boolean(place.nome));
 
             allPlaces.push(...mappedPlaces);
@@ -350,50 +369,70 @@ async function fetchPlacesFromNominatim(category) {
     const payload = await fetchNominatimJson(config.nominatimQuery, config.limit, 15000);
     const items = Array.isArray(payload) ? payload : [];
 
+    let ordinal = 0;
+
     return items
-        .map((item, index) => mapNominatimItemToPlace(item, category, index))
+        .map((item, index) => mapNominatimItemToPlace(item, category, index, ordinal++))
         .filter((place) => Boolean(place.nome));
 }
 
 export async function loadPlaces(category) {
     const localPlaces = getLocalPlaces(category);
 
+    const collectedPlaces = [];
+    const seenIds = new Set();
+    const seenPlaceKeys = new Set();
+
+    const addPlaces = (places) => {
+        for (const place of places) {
+            if (!place?.id) {
+                continue;
+            }
+
+            const placeKey = `${String(place.nome || '')
+                .trim()
+                .toLowerCase()}::${String(place.localizacao || '')
+                .trim()
+                .toLowerCase()}`;
+
+            if (seenIds.has(place.id) || seenPlaceKeys.has(placeKey)) {
+                continue;
+            }
+
+            seenIds.add(place.id);
+            seenPlaceKeys.add(placeKey);
+            collectedPlaces.push(place);
+
+            if (collectedPlaces.length >= 30) {
+                break;
+            }
+        }
+    };
+
+    addPlaces(localPlaces);
+
     try {
         const apiPlaces = await fetchPlacesFromApi(category);
-
-        if (apiPlaces.length > 0) {
-            return apiPlaces;
-        }
-
-        const nominatimPlaces = await fetchPlacesFromNominatim(category);
-
-        if (nominatimPlaces.length > 0) {
-            return nominatimPlaces;
-        }
-
-        if (FORCE_API_ONLY) {
-            return [];
-        }
+        addPlaces(apiPlaces);
     } catch (_error) {
         console.warn('[placesRepository] API indisponivel:', _error?.message || _error);
+    }
 
+    if (collectedPlaces.length < 30) {
         try {
             const nominatimPlaces = await fetchPlacesFromNominatim(category);
-
-            if (nominatimPlaces.length > 0) {
-                return nominatimPlaces;
-            }
+            addPlaces(nominatimPlaces);
         } catch (nominatimError) {
             console.warn(
                 '[placesRepository] Nominatim indisponivel:',
                 nominatimError?.message || nominatimError
             );
         }
-
-        if (FORCE_API_ONLY) {
-            return [];
-        }
     }
 
-    return localPlaces;
+    if (collectedPlaces.length === 0 && FORCE_API_ONLY) {
+        return [];
+    }
+
+    return collectedPlaces.length > 0 ? collectedPlaces.slice(0, 30) : localPlaces;
 }

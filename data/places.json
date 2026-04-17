@@ -3,25 +3,211 @@
         {
             "id": 1,
             "nome": "Parque da Cidade",
-            "descricao": "Area verde para caminhadas e pausas ao ar livre.",
-            "imagem": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
+            "descricao": "Area verde para caminhada, pausa e vista aberta.",
             "localizacao": "Centro",
             "categoria": "pontos"
         },
         {
             "id": 2,
             "nome": "Museu de Arte",
-            "descricao": "Museu com arte regional e exposicoes temporarias.",
-            "imagem": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
+            "descricao": "Acervo regional com exposicoes temporarias.",
             "localizacao": "Zona Norte",
             "categoria": "pontos"
         },
         {
             "id": 3,
             "nome": "Mirante do Rio",
-            "descricao": "Mirante com vista panoramica da cidade.",
-            "imagem": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
+            "descricao": "Vista panoramica da cidade e da margem.",
             "localizacao": "Margem Sul",
+            "categoria": "pontos"
+        },
+        {
+            "id": 4,
+            "nome": "Centro Historico",
+            "descricao": "Casaroes, ruas antigas e leitura urbana.",
+            "localizacao": "Centro Historico",
+            "categoria": "pontos"
+        },
+        {
+            "id": 5,
+            "nome": "Ponte da Lua",
+            "descricao": "Passagem cenica sobre o rio principal.",
+            "localizacao": "Orla",
+            "categoria": "pontos"
+        },
+        {
+            "id": 6,
+            "nome": "Praca das Fontes",
+            "descricao": "Ponto central com bancos e espaco aberto.",
+            "localizacao": "Praca Central",
+            "categoria": "pontos"
+        },
+        {
+            "id": 7,
+            "nome": "Teatro Municipal",
+            "descricao": "Palco cultural com eventos e apresentacoes.",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 8,
+            "nome": "Jardins do Alto",
+            "descricao": "Jardins elevados com paisagismo e sombra.",
+            "localizacao": "Bairro Alto",
+            "categoria": "pontos"
+        },
+        {
+            "id": 9,
+            "nome": "Farol Antigo",
+            "descricao": "Marco historico com referencia costeira.",
+            "localizacao": "Costa Leste",
+            "categoria": "pontos"
+        },
+        {
+            "id": 10,
+            "nome": "Estacao Central",
+            "descricao": "Ponto urbano com arquitetura classica.",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 11,
+            "nome": "Mercado de Sabores",
+            "descricao": "Feira local com produtos, artes e comida.",
+            "localizacao": "Mercado Velho",
+            "categoria": "pontos"
+        },
+        {
+            "id": 12,
+            "nome": "Avenida Cultural",
+            "descricao": "Eixo cultural com murais e comercio local.",
+            "localizacao": "Zona Leste",
+            "categoria": "pontos"
+        },
+        {
+            "id": 13,
+            "nome": "Orla do Pôr do Sol",
+            "descricao": "Passeio beira d'agua no fim da tarde.",
+            "localizacao": "Orla",
+            "categoria": "pontos"
+        },
+        {
+            "id": 14,
+            "nome": "Parque das Araucarias",
+            "descricao": "Trilhas leves e vegetacao marcante.",
+            "localizacao": "Zona Norte",
+            "categoria": "pontos"
+        },
+        {
+            "id": 15,
+            "nome": "Biblioteca Viva",
+            "descricao": "Espaco de leitura e programacao cultural.",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 16,
+            "nome": "Fortaleza do Mar",
+            "descricao": "Estrutura historica com vista aberta.",
+            "localizacao": "Costa Sul",
+            "categoria": "pontos"
+        },
+        {
+            "id": 17,
+            "nome": "Largo das Artes",
+            "descricao": "Ponto de encontro com galerias e atelies.",
+            "localizacao": "Centro Historico",
+            "categoria": "pontos"
+        },
+        {
+            "id": 18,
+            "nome": "Passarela da Vista",
+            "descricao": "Mirante elevado para fotos e percurso curto.",
+            "localizacao": "Margem Sul",
+            "categoria": "pontos"
+        },
+        {
+            "id": 19,
+            "nome": "Bosque Urbano",
+            "descricao": "Sombra, descanso e contato com a natureza.",
+            "localizacao": "Bairro Verde",
+            "categoria": "pontos"
+        },
+        {
+            "id": 20,
+            "nome": "Memorial da Cidade",
+            "descricao": "Historia local em exposicoes compactas.",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 21,
+            "nome": "Ilha do Mirante",
+            "descricao": "Acesso cenico com vista para a cidade.",
+            "localizacao": "Regiao Insular",
+            "categoria": "pontos"
+        },
+        {
+            "id": 22,
+            "nome": "Museu do Tempo",
+            "descricao": "Exibicao sobre memoria e patrimonio.",
+            "localizacao": "Zona Norte",
+            "categoria": "pontos"
+        },
+        {
+            "id": 23,
+            "nome": "Rua das Cores",
+            "descricao": "Rua artistica com fachadas e detalhes visuais.",
+            "localizacao": "Centro Historico",
+            "categoria": "pontos"
+        },
+        {
+            "id": 24,
+            "nome": "Parque da Serra",
+            "descricao": "Area natural para passeio e observacao.",
+            "localizacao": "Zona Alta",
+            "categoria": "pontos"
+        },
+        {
+            "id": 25,
+            "nome": "Mercado Municipal",
+            "descricao": "Comercio tradicional e produtos regionais.",
+            "localizacao": "Centro",
+            "categoria": "pontos"
+        },
+        {
+            "id": 26,
+            "nome": "Catedral do Centro",
+            "descricao": "Ponto historico de destaque arquitetonico.",
+            "localizacao": "Centro Historico",
+            "categoria": "pontos"
+        },
+        {
+            "id": 27,
+            "nome": "Marina Solar",
+            "descricao": "Espaco nautico com permanencia agradavel.",
+            "localizacao": "Orla",
+            "categoria": "pontos"
+        },
+        {
+            "id": 28,
+            "nome": "Trilhas da Mata",
+            "descricao": "Percurso verde com contato com a flora.",
+            "localizacao": "Reserva Sul",
+            "categoria": "pontos"
+        },
+        {
+            "id": 29,
+            "nome": "Portal Historico",
+            "descricao": "Entrada simbolica de patrimonio urbano.",
+            "localizacao": "Acesso Leste",
+            "categoria": "pontos"
+        },
+        {
+            "id": 30,
+            "nome": "Praca do Relogio",
+            "descricao": "Praca central com referencia marcante.",
+            "localizacao": "Praca Central",
             "categoria": "pontos"
         }
     ],
