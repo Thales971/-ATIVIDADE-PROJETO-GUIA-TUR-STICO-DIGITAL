@@ -77,7 +77,12 @@ function AppTabs() {
                     paddingTop: 6,
                 },
                 tabBarIcon: ({ color, size }) => {
-                    const iconName = route.name === 'Pontos Turísticos' ? 'home' : 'star';
+                    const iconName =
+                        route.name === 'Pontos Turísticos'
+                            ? 'home'
+                            : route.name === 'Restaurantes'
+                              ? 'star'
+                              : 'send';
 
                     return <Feather name={iconName} size={size} color={color} />;
                 },
@@ -91,6 +96,7 @@ function AppTabs() {
             <Tab.Screen name='Restaurantes'>
                 {(props) => <HomeScreen {...props} category='restaurantes' title='Restaurantes' />}
             </Tab.Screen>
+            <Tab.Screen name='Contato' component={ContactScreen} />
         </Tab.Navigator>
     );
 }
@@ -144,16 +150,7 @@ export default function App() {
                                 component={AboutScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Feather name='star' color={color} size={size} />
-                                    ),
-                                }}
-                            />
-                            <Drawer.Screen
-                                name='Contato'
-                                component={ContactScreen}
-                                options={{
-                                    drawerIcon: ({ color, size }) => (
-                                        <Feather name='send' color={color} size={size} />
+                                        <Feather name='info' color={color} size={size} />
                                     ),
                                 }}
                             />

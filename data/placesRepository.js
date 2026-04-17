@@ -1,4 +1,5 @@
 import placesData from './places.json';
+import { getPlaceImage } from './placeVisuals';
 
 const OVERPASS_ENDPOINT = 'https://overpass-api.de/api/interpreter';
 const NOMINATIM_ENDPOINT = 'https://nominatim.openstreetmap.org/search';
@@ -146,9 +147,8 @@ async function fetchNominatimJson(query, limit = 20, timeoutMs = 15000) {
     }
 }
 
-function buildFallbackImage(category, id) {
-    const seed = `${category}-${id}`;
-    return `https://picsum.photos/seed/${encodeURIComponent(seed)}/1200/800`;
+function buildFallbackImage(category, id, tags = {}, name = '') {
+    return getPlaceImage({ category, tags, name, seed: id });
 }
 
 function buildLocationText(tags, lat, lon) {
@@ -205,7 +205,7 @@ function buildWikimediaImageUrl(wikimediaValue) {
     return `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(fileName)}?width=1200`;
 }
 
-function pickImage(tags, category, id) {
+function pickImage(tags, category, id, name = '') {
     if (typeof tags?.image === 'string' && /^https?:\/\//i.test(tags.image)) {
         return tags.image;
     }
@@ -216,7 +216,7 @@ function pickImage(tags, category, id) {
         return wikimediaUrl;
     }
 
-    return buildFallbackImage(category, id);
+    return buildFallbackImage(category, id, tags, name);
 }
 
 function normalizeName(tags, category, index) {
@@ -255,12 +255,13 @@ function normalizeNominatimName(item, category, index) {
 function mapElementToPlace(element, category, index) {
     const tags = element?.tags || {};
     const { lat, lon } = getCoordinates(element);
+    const nome = normalizeName(tags, category, index);
 
     return {
         id: `osm-${category}-${element?.type}-${element?.id}`,
-        nome: normalizeName(tags, category, index),
+        nome,
         descricao: buildDescription(tags, category),
-        imagem: pickImage(tags, category, element?.id),
+        imagem: pickImage(tags, category, element?.id, nome),
         localizacao: buildLocationText(tags, lat, lon),
         categoria: category,
     };
@@ -276,7 +277,9 @@ function mapNominatimItemToPlace(item, category, index) {
         address.city ||
         address.town ||
         address.state ||
-        (Number.isFinite(lat) && Number.isFinite(lon) ? `${lat.toFixed(4)}, ${lon.toFixed(4)}` : 'Localizacao nao informada');
+        (Number.isFinite(lat) && Number.isFinite(lon)
+            ? `${lat.toFixed(4)}, ${lon.toFixed(4)}`
+            : 'Localizacao nao informada');
 
     return {
         id: `nom-${category}-${item?.place_id || index}`,
@@ -285,7 +288,12 @@ function mapNominatimItemToPlace(item, category, index) {
             category === 'restaurantes'
                 ? 'Restaurante encontrado via OpenStreetMap Nominatim.'
                 : 'Ponto turistico encontrado via OpenStreetMap Nominatim.',
-        imagem: buildFallbackImage(category, item?.place_id || index),
+        imagem: buildFallbackImage(
+            category,
+            item?.place_id || index,
+            item?.tags || {},
+            normalizeNominatimName(item, category, index)
+        ),
         localizacao: locationText,
         categoria: category,
     };
@@ -327,9 +335,7 @@ async function fetchPlacesFromApi(category) {
         return [];
     }
 
-    const uniquePlaces = Array.from(
-        new Map(allPlaces.map((place) => [place.id, place])).values()
-    );
+    const uniquePlaces = Array.from(new Map(allPlaces.map((place) => [place.id, place])).values());
 
     return uniquePlaces.slice(0, config.limit);
 }

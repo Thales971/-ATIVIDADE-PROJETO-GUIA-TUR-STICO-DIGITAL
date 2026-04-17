@@ -4,7 +4,7 @@
             "id": 1,
             "nome": "Parque da Cidade",
             "descricao": "Area verde para caminhadas e pausas ao ar livre.",
-            "imagem": "https://picsum.photos/seed/parque-da-cidade/900/600",
+            "imagem": "https://images.unsplash.com/photo-1448375240586-882707db888b?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Centro",
             "categoria": "pontos"
         },
@@ -12,7 +12,7 @@
             "id": 2,
             "nome": "Museu de Arte",
             "descricao": "Museu com arte regional e exposicoes temporarias.",
-            "imagem": "https://picsum.photos/seed/museu-de-arte/900/600",
+            "imagem": "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Zona Norte",
             "categoria": "pontos"
         },
@@ -20,7 +20,7 @@
             "id": 3,
             "nome": "Mirante do Rio",
             "descricao": "Mirante com vista panoramica da cidade.",
-            "imagem": "https://picsum.photos/seed/mirante-do-rio/900/600",
+            "imagem": "https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Margem Sul",
             "categoria": "pontos"
         }
@@ -30,7 +30,7 @@
             "id": 4,
             "nome": "Sabor Local",
             "descricao": "Comida caseira com pratos regionais.",
-            "imagem": "https://picsum.photos/seed/sabor-local/900/600",
+            "imagem": "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Centro Historico",
             "categoria": "restaurantes"
         },
@@ -38,7 +38,7 @@
             "id": 5,
             "nome": "Bistro da Praca",
             "descricao": "Menu leve com saladas, massas e cafes.",
-            "imagem": "https://picsum.photos/seed/bistro-da-praca/900/600",
+            "imagem": "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Praca Central",
             "categoria": "restaurantes"
         },
@@ -46,7 +46,7 @@
             "id": 6,
             "nome": "Sabores do Porto",
             "descricao": "Peixes e frutos do mar com atendimento acolhedor.",
-            "imagem": "https://picsum.photos/seed/sabores-do-porto/900/600",
+            "imagem": "https://images.unsplash.com/photo-1547592180-85f173990554?auto=format&fit=crop&w=1200&q=80",
             "localizacao": "Orla",
             "categoria": "restaurantes"
         }
