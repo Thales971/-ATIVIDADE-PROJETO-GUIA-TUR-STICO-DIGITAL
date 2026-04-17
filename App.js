@@ -16,6 +16,7 @@ import HomeScreen from './src/screens/HomeScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import AboutScreen from './src/screens/AboutScreen';
 import ContactScreen from './src/screens/ContactScreen';
+import LoginScreen from './src/screens/LoginScreen';
 
 const colors = {
     primary: '#111111',
@@ -103,7 +104,8 @@ function AppTabs() {
 
 function MainStack() {
     return (
-        <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
+        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
+            <Stack.Screen name='Login' component={LoginScreen} />
             <Stack.Screen name='Welcome' component={WelcomeScreen} />
             <Stack.Screen name='Tabs' component={AppTabs} />
             <Stack.Screen name='Detalhes' component={DetailsScreen} />
@@ -142,6 +144,15 @@ export default function App() {
                                 options={{
                                     drawerIcon: ({ color, size }) => (
                                         <Feather name='home' color={color} size={size} />
+                                    ),
+                                }}
+                            />
+                            <Drawer.Screen
+                                name='Login'
+                                component={LoginScreen}
+                                options={{
+                                    drawerIcon: ({ color, size }) => (
+                                        <Feather name='log-in' color={color} size={size} />
                                     ),
                                 }}
                             />
