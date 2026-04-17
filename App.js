@@ -68,19 +68,22 @@ function AppTabs() {
                 headerShown: false,
                 tabBarShowLabel: false,
                 tabBarActiveTintColor: colors.surface,
-                tabBarInactiveTintColor: '#b7b0b0',
+                tabBarInactiveTintColor: 'rgba(255,255,255,0.92)',
                 tabBarStyle: {
                     backgroundColor: colors.darkSurface,
                     borderTopColor: colors.darkSurface,
-                    height: 68,
-                    paddingBottom: 10,
-                    paddingTop: 8,
+                    height: 56,
+                    paddingBottom: 6,
+                    paddingTop: 6,
                 },
                 tabBarIcon: ({ color, size }) => {
                     const iconName =
-                        route.name === 'Pontos Turísticos' ? 'map-outline' : 'restaurant-outline';
+                        route.name === 'Pontos Turísticos' ? 'home-outline' : 'star-outline';
 
-                    return <Ionicons name={iconName} size={size} color={color} />;
+                    return <Ionicons name={iconName} size={24} color={color} />;
+                },
+                tabBarItemStyle: {
+                    paddingVertical: 2,
                 },
             })}>
             <Tab.Screen name='Pontos Turísticos'>
@@ -142,11 +145,7 @@ export default function App() {
                                 component={AboutScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Ionicons
-                                            name='information-circle-outline'
-                                            color={color}
-                                            size={size}
-                                        />
+                                        <Ionicons name='star-outline' color={color} size={size} />
                                     ),
                                 }}
                             />
@@ -155,7 +154,11 @@ export default function App() {
                                 component={ContactScreen}
                                 options={{
                                     drawerIcon: ({ color, size }) => (
-                                        <Ionicons name='call-outline' color={color} size={size} />
+                                        <Ionicons
+                                            name='paper-plane-outline'
+                                            color={color}
+                                            size={size}
+                                        />
                                     ),
                                 }}
                             />
