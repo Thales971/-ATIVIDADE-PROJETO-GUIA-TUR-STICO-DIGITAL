@@ -19,8 +19,31 @@ npm install
 ## Rodar
 
 ```bash
-npx expo start
+npm run start
 ```
+
+## Rodar no celular com Expo Go
+
+1. Instale o app Expo Go no seu celular.
+1. Garanta que computador e celular estejam na mesma rede Wi-Fi.
+1. Rode:
+
+```bash
+npm run mobile
+```
+
+1. Escaneie o QR code exibido no terminal ou no navegador do Expo.
+
+Se o celular não conectar pelo LAN, use o comando `npm run mobile` para forçar o modo tunnel.
+
+## Observações sobre a API e imagens
+
+- O app carrega `data/places.json` como fallback local se a API do OpenStreetMap/Nominatim falhar.
+- A seleção das imagens foi ajustada para usar uma curadoria temática e reduzir repetições entre
+  lugares.
+- O projeto está usando `react-native-worklets@0.5.1`, que é a faixa compatível com o Expo SDK 54
+  para manter o Drawer funcionando no Expo Go sem o erro de TurboModule.
+- Se quiser trocar os dados, edite `data/places.json`.
 
 ## Como evoluir sem quebrar o app
 

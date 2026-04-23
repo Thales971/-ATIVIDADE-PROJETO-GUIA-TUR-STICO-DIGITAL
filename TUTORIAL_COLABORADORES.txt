@@ -18,11 +18,15 @@ Use como guia unico para os 3 colaboradores.
 
 3) INSTALACAO
 - npm install
-- Se o ambiente estiver limpo ou faltando pacotes do Expo, rode:
-  npx expo install @react-navigation/native @react-navigation/drawer @react-navigation/bottom-tabs @react-navigation/native-stack react-native-gesture-handler react-native-reanimated react-native-screens react-native-safe-area-context react-native-paper react-native-vector-icons react-dom react-native-web babel-preset-expo
+- Se o Expo Doctor apontar divergencia no react-native-worklets, rode `npx expo install --check`
+  para voltar para a faixa compatível do Expo SDK 54.
+- Se precisar reinstalar tudo, rode apenas npm install de novo.
+- Se aparecer tela vermelha no Expo Go, feche o app no celular, limpe o cache com
+  npx expo start -c e abra o QR novamente.
 
 4) EXECUCAO
-- npx expo start
+- npm run start
+- npm run mobile para testar no celular quando o QR nao conectar pela rede local
 - npx expo start -c para limpar cache
 - npx expo start --web para validar no navegador
 
