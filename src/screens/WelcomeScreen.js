@@ -1,40 +1,41 @@
 import React, { useState } from 'react';
-import { Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
-import { Button, Checkbox, Chip, IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Checkbox, Chip, IconButton } from 'react-native-paper';
 import { Feather, Ionicons } from '@expo/vector-icons';
 
-const brandFont = Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif',
-    default: 'serif',
-});
+const colors = {
+    background: '#d9d1d0',
+    surface: '#ffffff',
+    text: '#111111',
+    muted: '#676060',
+    border: '#cfc7c7',
+};
 
-const terms = [
+const notes = [
     {
         icon: 'file-text',
         title: 'Uso do app',
-        text: 'O conteudo e o fluxo atual servem como base de validacao e podem mudar.',
+        text: 'Conteudo beta para validar o fluxo principal.',
     },
     {
         icon: 'image',
-        title: 'Conteudo visual',
-        text: 'Imagens, textos e locais sao temporarios enquanto o Figma final nao fecha.',
+        title: 'Visual simples',
+        text: 'Layout enxuto para ler rapido no celular.',
     },
     {
         icon: 'refresh-cw',
-        title: 'Atualizacoes',
-        text: 'A interface pode receber ajustes rapidos sem quebrar a navegacao.',
+        title: 'Mudancas rapidas',
+        text: 'Estrutura leve para editar sem complicar o projeto.',
     },
 ];
 
 export default function WelcomeScreen({ navigation }) {
-    const theme = useTheme();
-    const styles = createStyles(theme);
     const [agreed, setAgreed] = useState(false);
 
     const openDrawer = () => {
-        const drawerNavigation = navigation.getParent?.() ?? navigation;
+        const drawerNavigation =
+            navigation.getParent?.()?.getParent?.() ?? navigation.getParent?.() ?? navigation;
         drawerNavigation?.dispatch(DrawerActions.openDrawer());
     };
 
@@ -47,84 +48,57 @@ export default function WelcomeScreen({ navigation }) {
             style={styles.container}
             contentContainerStyle={styles.content}
             showsVerticalScrollIndicator={false}>
-            <View style={styles.bgOrbTop} pointerEvents='none' />
-            <View style={styles.bgOrbBottom} pointerEvents='none' />
-
-            <View style={styles.topBar}>
-                <Chip mode='outlined' style={styles.betaChip} textStyle={styles.betaChipText}>
+            <View style={styles.header}>
+                <Chip mode='outlined' style={styles.chip} textStyle={styles.chipText}>
                     Beta
                 </Chip>
-                <IconButton
-                    icon='menu'
-                    size={22}
-                    iconColor={theme.colors.onSurface}
-                    onPress={openDrawer}
-                />
+                <IconButton icon='menu' size={22} iconColor={colors.text} onPress={openDrawer} />
             </View>
 
-            <View style={styles.heroBlock}>
+            <View style={styles.hero}>
                 <Text style={styles.brand}>BLACK CITY</Text>
-                <View style={styles.iconFrame}>
-                    <Ionicons name='cube-outline' size={74} color={theme.colors.onSurface} />
+                <View style={styles.iconBox}>
+                    <Ionicons name='cube-outline' size={68} color={colors.text} />
                 </View>
                 <Text style={styles.subtitle}>
-                    Descubra os melhores pontos turisticos e restaurantes da cidade de forma simples
-                    e rapida.
+                    Guia simples para pontos turisticos e restaurantes da cidade.
                 </Text>
             </View>
 
-            <Surface style={styles.termsCard} elevation={2}>
-                <View style={styles.termsHeader}>
-                    <View style={styles.termsHeaderText}>
-                        <Text style={styles.termsTitle}>Termos de Uso</Text>
-                        <Text style={styles.termsSubtitle}>
-                            Leia esta versao beta antes de continuar
-                        </Text>
-                    </View>
-                    <Chip
-                        mode='outlined'
-                        style={styles.versionChip}
-                        textStyle={styles.versionChipText}>
-                        BLACK CITY
-                    </Chip>
-                </View>
+            <View style={styles.card}>
+                <Text style={styles.cardTitle}>Antes de continuar</Text>
 
-                <View style={styles.termsList}>
-                    {terms.map((term, index) => (
-                        <View key={term.title}>
-                            <View style={styles.termRow}>
-                                <View style={styles.termIcon}>
-                                    <Feather
-                                        name={term.icon}
-                                        size={18}
-                                        color={theme.colors.onSurface}
-                                    />
-                                </View>
-                                <View style={styles.termBody}>
-                                    <Text style={styles.termTitle}>{term.title}</Text>
-                                    <Text style={styles.termText}>{term.text}</Text>
-                                </View>
+                {notes.map((item, index) => (
+                    <View key={item.title}>
+                        <View style={styles.noteRow}>
+                            <View style={styles.noteIcon}>
+                                <Feather name={item.icon} size={16} color={colors.text} />
                             </View>
 
-                            {index < terms.length - 1 ? <View style={styles.termDivider} /> : null}
+                            <View style={styles.noteBody}>
+                                <Text style={styles.noteTitle}>{item.title}</Text>
+                                <Text style={styles.noteText}>{item.text}</Text>
+                            </View>
                         </View>
-                    ))}
-                </View>
-            </Surface>
+
+                        {index < notes.length - 1 ? <View style={styles.divider} /> : null}
+                    </View>
+                ))}
+            </View>
 
             <View style={styles.checkboxRow}>
                 <Checkbox
                     status={agreed ? 'checked' : 'unchecked'}
                     onPress={() => setAgreed((current) => !current)}
-                    color={theme.colors.onSurface}
+                    color={colors.text}
                 />
-                <Text style={styles.checkboxText}>Concordo com os termos desta versao beta</Text>
+                <Text style={styles.checkboxText}>Concordo com a versao beta</Text>
             </View>
 
             <Button
                 mode='contained'
-                buttonColor={theme.colors.onSurface}
-                textColor={theme.colors.surface}
+                buttonColor={colors.text}
+                textColor={colors.surface}
                 style={styles.button}
                 contentStyle={styles.buttonContent}
                 disabled={!agreed}
@@ -135,173 +109,120 @@ export default function WelcomeScreen({ navigation }) {
     );
 }
 
-const createStyles = (theme) =>
-    StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-        content: {
-            flexGrow: 1,
-            paddingHorizontal: 24,
-            paddingTop: 18,
-            paddingBottom: 28,
-            position: 'relative',
-        },
-        bgOrbTop: {
-            position: 'absolute',
-            top: 22,
-            right: -56,
-            width: 164,
-            height: 164,
-            borderRadius: 82,
-            backgroundColor: 'rgba(255,255,255,0.22)',
-        },
-        bgOrbBottom: {
-            position: 'absolute',
-            bottom: 128,
-            left: -72,
-            width: 204,
-            height: 204,
-            borderRadius: 102,
-            backgroundColor: 'rgba(255,255,255,0.12)',
-        },
-        topBar: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            marginBottom: 8,
-        },
-        betaChip: {
-            backgroundColor: 'rgba(255,255,255,0.28)',
-            borderColor: 'rgba(17,17,17,0.1)',
-        },
-        betaChipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
-        },
-        heroBlock: {
-            alignItems: 'center',
-            paddingTop: 12,
-            paddingBottom: 20,
-        },
-        brand: {
-            fontFamily: brandFont,
-            fontSize: 32,
-            letterSpacing: 1,
-            color: theme.colors.onSurface,
-            marginBottom: 14,
-            textAlign: 'center',
-        },
-        iconFrame: {
-            width: 118,
-            height: 118,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 28,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.1)',
-            backgroundColor: 'rgba(255,255,255,0.16)',
-        },
-        subtitle: {
-            marginTop: 16,
-            maxWidth: 280,
-            textAlign: 'center',
-            color: theme.colors.onSurfaceVariant,
-            lineHeight: 20,
-            fontSize: 13,
-        },
-        termsCard: {
-            backgroundColor: theme.colors.surface,
-            borderRadius: 22,
-            padding: 22,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        termsHeader: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'flex-start',
-            marginBottom: 16,
-        },
-        termsHeaderText: {
-            flex: 1,
-            paddingRight: 12,
-        },
-        termsTitle: {
-            color: theme.colors.onSurface,
-            fontSize: 15,
-            fontWeight: '700',
-            letterSpacing: 0.2,
-        },
-        termsSubtitle: {
-            marginTop: 4,
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 12,
-            lineHeight: 16,
-        },
-        versionChip: {
-            alignSelf: 'flex-start',
-            backgroundColor: 'rgba(17,17,17,0.04)',
-            borderColor: 'rgba(17,17,17,0.12)',
-        },
-        versionChipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
-        },
-        termsList: {
-            flexDirection: 'column',
-        },
-        termRow: {
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-        },
-        termIcon: {
-            width: 38,
-            height: 38,
-            borderRadius: 19,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(17,17,17,0.06)',
-            marginRight: 14,
-        },
-        termBody: {
-            flex: 1,
-        },
-        termTitle: {
-            color: theme.colors.onSurface,
-            fontSize: 13,
-            fontWeight: '700',
-            marginBottom: 5,
-        },
-        termText: {
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 12,
-            lineHeight: 17,
-        },
-        termDivider: {
-            height: 1,
-            backgroundColor: 'rgba(17,17,17,0.08)',
-            marginVertical: 14,
-            marginLeft: 52,
-        },
-        checkboxRow: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            marginTop: 16,
-            marginBottom: 14,
-        },
-        checkboxText: {
-            fontSize: 12,
-            color: theme.colors.onSurface,
-            flexShrink: 1,
-            lineHeight: 16,
-        },
-        button: {
-            alignSelf: 'stretch',
-            borderRadius: 14,
-        },
-        buttonContent: {
-            height: 50,
-        },
-    });
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colors.background,
+    },
+    content: {
+        paddingHorizontal: 20,
+        paddingTop: 16,
+        paddingBottom: 28,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginBottom: 16,
+    },
+    chip: {
+        backgroundColor: 'rgba(255,255,255,0.35)',
+        borderColor: 'rgba(17,17,17,0.1)',
+    },
+    chipText: {
+        fontSize: 10,
+        color: colors.text,
+    },
+    hero: {
+        alignItems: 'center',
+        marginBottom: 16,
+    },
+    brand: {
+        fontSize: 30,
+        fontWeight: '700',
+        letterSpacing: 1,
+        color: colors.text,
+        textAlign: 'center',
+    },
+    iconBox: {
+        width: 112,
+        height: 112,
+        marginTop: 14,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 28,
+        backgroundColor: 'rgba(255,255,255,0.22)',
+        borderWidth: 1,
+        borderColor: colors.border,
+    },
+    subtitle: {
+        marginTop: 14,
+        maxWidth: 300,
+        textAlign: 'center',
+        color: colors.muted,
+        fontSize: 13,
+        lineHeight: 20,
+    },
+    card: {
+        backgroundColor: colors.surface,
+        borderRadius: 22,
+        padding: 18,
+        borderWidth: 1,
+        borderColor: 'rgba(17,17,17,0.08)',
+    },
+    cardTitle: {
+        color: colors.text,
+        fontSize: 16,
+        fontWeight: '700',
+        marginBottom: 10,
+    },
+    noteRow: {
+        flexDirection: 'row',
+        alignItems: 'flex-start',
+    },
+    noteIcon: {
+        width: 34,
+        height: 34,
+        borderRadius: 12,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: 'rgba(17,17,17,0.06)',
+        marginRight: 12,
+    },
+    noteBody: {
+        flex: 1,
+    },
+    noteTitle: {
+        color: colors.text,
+        fontSize: 13,
+        fontWeight: '700',
+        marginBottom: 2,
+    },
+    noteText: {
+        color: colors.muted,
+        fontSize: 12,
+        lineHeight: 18,
+    },
+    divider: {
+        height: 1,
+        backgroundColor: 'rgba(17,17,17,0.08)',
+        marginVertical: 12,
+    },
+    checkboxRow: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginTop: 10,
+    },
+    checkboxText: {
+        flex: 1,
+        color: colors.text,
+        fontSize: 13,
+    },
+    button: {
+        marginTop: 14,
+        borderRadius: 14,
+    },
+    buttonContent: {
+        height: 50,
+    },
+});

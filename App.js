@@ -16,7 +16,6 @@ import HomeScreen from './src/screens/HomeScreen';
 import DetailsScreen from './src/screens/DetailsScreen';
 import AboutScreen from './src/screens/AboutScreen';
 import ContactScreen from './src/screens/ContactScreen';
-import LoginScreen from './src/screens/LoginScreen';
 
 const colors = {
     primary: '#111111',
@@ -82,8 +81,8 @@ function AppTabs() {
                         route.name === 'Pontos Turísticos'
                             ? 'home'
                             : route.name === 'Restaurantes'
-                              ? 'star'
-                              : 'send';
+                                ? 'star'
+                                : 'send';
 
                     return <Feather name={iconName} size={size} color={color} />;
                 },
@@ -104,8 +103,7 @@ function AppTabs() {
 
 function MainStack() {
     return (
-        <Stack.Navigator initialRouteName='Login' screenOptions={{ headerShown: false }}>
-            <Stack.Screen name='Login' component={LoginScreen} />
+        <Stack.Navigator initialRouteName='Welcome' screenOptions={{ headerShown: false }}>
             <Stack.Screen name='Welcome' component={WelcomeScreen} />
             <Stack.Screen name='Tabs' component={AppTabs} />
             <Stack.Screen name='Detalhes' component={DetailsScreen} />

@@ -1,23 +1,25 @@
 import React from 'react';
-import { Image, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
-import { Button, Chip, IconButton, Surface, Text, useTheme } from 'react-native-paper';
+import { Button, Chip, IconButton } from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
 
-const brandFont = Platform.select({
-    ios: 'Times New Roman',
-    android: 'serif',
-    default: 'serif',
-});
+const colors = {
+    background: '#d9d1d0',
+    surface: '#ffffff',
+    text: '#111111',
+    muted: '#676060',
+    border: '#cfc7c7',
+    accent: '#00BCD9',
+};
 
 export default function DetailsScreen({ navigation, route }) {
-    const theme = useTheme();
-    const styles = createStyles(theme);
     const place = route?.params?.place;
 
     const openDrawer = () => {
         const drawerNavigation =
             navigation.getParent?.()?.getParent?.() ?? navigation.getParent?.() ?? navigation;
+
         drawerNavigation?.dispatch(DrawerActions.openDrawer());
     };
 
@@ -28,278 +30,231 @@ export default function DetailsScreen({ navigation, route }) {
                     <IconButton
                         icon='arrow-left'
                         size={22}
-                        iconColor={theme.colors.onSurface}
+                        iconColor={colors.text}
                         onPress={() => navigation.goBack()}
                     />
                     <Text style={styles.brand}>BLACK CITY</Text>
                     <IconButton
                         icon='menu'
                         size={22}
-                        iconColor={theme.colors.onSurface}
+                        iconColor={colors.text}
                         onPress={openDrawer}
                     />
                 </View>
 
-                <View style={styles.fallbackWrap}>
-                    <Surface style={styles.fallbackCard} elevation={1}>
-                        <Feather name='map-pin' size={26} color={theme.colors.onSurface} />
-                        <Text style={styles.fallbackTitle}>Detalhes indisponiveis</Text>
-                        <Text style={styles.fallbackText}>
+                <View style={styles.emptyWrap}>
+                    <View style={styles.emptyCard}>
+                        <Feather name='map-pin' size={26} color={colors.text} />
+                        <Text style={styles.emptyTitle}>Detalhes indisponiveis</Text>
+                        <Text style={styles.emptyText}>
                             Nenhum local foi enviado pela navegacao.
                         </Text>
-                    </Surface>
+                        <Button
+                            mode='contained'
+                            buttonColor={colors.text}
+                            textColor={colors.surface}
+                            style={styles.button}
+                            contentStyle={styles.buttonContent}
+                            onPress={() => navigation.navigate('Início')}>
+                            Voltar ao inicio
+                        </Button>
+                    </View>
                 </View>
             </View>
         );
     }
 
+    const categoryLabel = place.categoria === 'restaurantes' ? 'Gastronomia' : 'Turismo';
+
     return (
         <View style={styles.container}>
-            <ScrollView showsVerticalScrollIndicator={false} contentContainerStyle={styles.scroll}>
-                <View style={styles.heroWrap}>
+            <View style={styles.header}>
+                <IconButton
+                    icon='arrow-left'
+                    size={22}
+                    iconColor={colors.text}
+                    onPress={() => navigation.goBack()}
+                />
+                <Text style={styles.brand}>BLACK CITY</Text>
+                <IconButton icon='menu' size={22} iconColor={colors.text} onPress={openDrawer} />
+            </View>
+
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={styles.scrollContent}>
+                <View style={styles.hero}>
                     <Image source={{ uri: place.imagem }} style={styles.heroImage} />
-                    <View style={styles.heroOverlay} />
-
-                    <View style={styles.heroHeader}>
-                        <IconButton
-                            icon='arrow-left'
-                            size={22}
-                            iconColor={theme.colors.onSurface}
-                            style={styles.headerButton}
-                            onPress={() => navigation.goBack()}
-                        />
-                        <Text style={styles.brand}>BLACK CITY</Text>
-                        <IconButton
-                            icon='menu'
-                            size={22}
-                            iconColor={theme.colors.onSurface}
-                            style={styles.headerButton}
-                            onPress={openDrawer}
-                        />
-                    </View>
-
                     <Chip mode='outlined' style={styles.heroChip} textStyle={styles.heroChipText}>
-                        {place.categoria === 'restaurantes' ? 'Gastronomia' : 'Turismo'}
+                        {categoryLabel}
                     </Chip>
                 </View>
 
-                <Surface style={styles.bodyCard} elevation={1}>
+                <View style={styles.card}>
                     <Text style={styles.title}>{place.nome}</Text>
-                    <Chip
-                        icon='map-marker-outline'
-                        mode='outlined'
-                        style={styles.locationChip}
-                        textStyle={styles.locationChipText}>
-                        {place.localizacao}
-                    </Chip>
-
-                    <View style={styles.metaRow}>
-                        <Chip
-                            mode='outlined'
-                            style={styles.metaChip}
-                            textStyle={styles.metaChipText}>
-                            Dados OSM
-                        </Chip>
-                        <Chip
-                            mode='outlined'
-                            style={styles.metaChip}
-                            textStyle={styles.metaChipText}>
-                            Imagem curada
-                        </Chip>
-                    </View>
+                    <Text style={styles.location}>{place.localizacao}</Text>
 
                     <Text style={styles.sectionTitle}>Descricao</Text>
                     <Text style={styles.description}>{place.descricao}</Text>
 
-                    <Surface style={styles.noteCard} elevation={0}>
-                        <Feather name='image' size={18} color={theme.colors.onSurface} />
-                        <Text style={styles.noteText}>
-                            A imagem exibida segue um criterio tematico por categoria para manter a
-                            leitura visual coerente com o guia.
-                        </Text>
-                    </Surface>
+                    <View style={styles.infoRow}>
+                        <View style={styles.infoBox}>
+                            <Text style={styles.infoLabel}>Origem</Text>
+                            <Text style={styles.infoValue}>Dados locais</Text>
+                        </View>
+                        <View style={styles.infoBox}>
+                            <Text style={styles.infoLabel}>Imagem</Text>
+                            <Text style={styles.infoValue}>Curada</Text>
+                        </View>
+                    </View>
 
                     <Button
                         mode='contained'
-                        buttonColor={theme.colors.onSurface}
-                        textColor={theme.colors.surface}
+                        buttonColor={colors.text}
+                        textColor={colors.surface}
                         style={styles.button}
                         contentStyle={styles.buttonContent}
-                        onPress={() => {}}>
-                        Favoritar
+                        onPress={() => navigation.goBack()}>
+                        Voltar
                     </Button>
-                </Surface>
+                </View>
             </ScrollView>
         </View>
     );
 }
 
-const createStyles = (theme) =>
-    StyleSheet.create({
-        container: {
-            flex: 1,
-            backgroundColor: theme.colors.background,
-        },
-        scroll: {
-            paddingBottom: 24,
-        },
-        header: {
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-            paddingHorizontal: 12,
-            paddingTop: 14,
-            paddingBottom: 6,
-        },
-        brand: {
-            fontFamily: brandFont,
-            fontSize: 20,
-            letterSpacing: 0.8,
-            color: theme.colors.onSurface,
-            textAlign: 'center',
-        },
-        fallbackWrap: {
-            flex: 1,
-            paddingHorizontal: 16,
-            paddingTop: 24,
-        },
-        fallbackCard: {
-            borderRadius: 24,
-            backgroundColor: theme.colors.surface,
-            padding: 22,
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-            minHeight: 220,
-        },
-        fallbackTitle: {
-            marginTop: 12,
-            color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 18,
-        },
-        fallbackText: {
-            marginTop: 8,
-            color: theme.colors.onSurfaceVariant,
-            textAlign: 'center',
-            lineHeight: 18,
-        },
-        heroWrap: {
-            marginHorizontal: 16,
-            marginTop: 4,
-            borderRadius: 28,
-            overflow: 'hidden',
-            position: 'relative',
-            backgroundColor: theme.colors.surfaceVariant,
-        },
-        heroImage: {
-            width: '100%',
-            height: 300,
-        },
-        heroOverlay: {
-            ...StyleSheet.absoluteFillObject,
-            backgroundColor: 'rgba(0,0,0,0.08)',
-        },
-        heroHeader: {
-            position: 'absolute',
-            top: 8,
-            left: 6,
-            right: 6,
-            flexDirection: 'row',
-            alignItems: 'center',
-            justifyContent: 'space-between',
-        },
-        headerButton: {
-            margin: 0,
-            backgroundColor: 'rgba(255,255,255,0.78)',
-        },
-        heroChip: {
-            position: 'absolute',
-            left: 14,
-            bottom: 14,
-            backgroundColor: 'rgba(255,255,255,0.86)',
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        heroChipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
-        },
-        bodyCard: {
-            marginHorizontal: 16,
-            marginTop: -18,
-            borderRadius: 28,
-            backgroundColor: theme.colors.surface,
-            padding: 20,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        title: {
-            marginBottom: 10,
-            color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 24,
-            lineHeight: 28,
-        },
-        locationChip: {
-            alignSelf: 'flex-start',
-            marginBottom: 14,
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            borderColor: 'rgba(17,17,17,0.1)',
-        },
-        locationChipText: {
-            fontSize: 11,
-            color: theme.colors.onSurface,
-        },
-        metaRow: {
-            flexDirection: 'row',
-            flexWrap: 'wrap',
-            gap: 10,
-            marginBottom: 16,
-        },
-        metaChip: {
-            alignSelf: 'flex-start',
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        metaChipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
-        },
-        sectionTitle: {
-            marginBottom: 8,
-            color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 15,
-        },
-        description: {
-            color: theme.colors.onSurfaceVariant,
-            lineHeight: 22,
-            fontSize: 13,
-        },
-        noteCard: {
-            marginTop: 18,
-            borderRadius: 20,
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            padding: 14,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-            gap: 10,
-        },
-        noteText: {
-            flex: 1,
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 12,
-            lineHeight: 18,
-        },
-        button: {
-            marginTop: 18,
-            alignSelf: 'stretch',
-            borderRadius: 14,
-        },
-        buttonContent: {
-            height: 50,
-        },
-    });
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        backgroundColor: colors.background,
+    },
+    header: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: 12,
+        paddingTop: 12,
+        paddingBottom: 8,
+    },
+    brand: {
+        color: colors.text,
+        fontSize: 20,
+        fontWeight: '700',
+        letterSpacing: 0.8,
+    },
+    scrollContent: {
+        paddingBottom: 28,
+    },
+    hero: {
+        marginHorizontal: 16,
+        borderRadius: 24,
+        overflow: 'hidden',
+        backgroundColor: colors.surface,
+    },
+    heroImage: {
+        width: '100%',
+        height: 260,
+    },
+    heroChip: {
+        position: 'absolute',
+        left: 14,
+        bottom: 14,
+        backgroundColor: 'rgba(255,255,255,0.9)',
+        borderColor: 'rgba(17,17,17,0.1)',
+    },
+    heroChipText: {
+        fontSize: 10,
+        color: colors.text,
+    },
+    card: {
+        marginHorizontal: 16,
+        marginTop: 12,
+        backgroundColor: colors.surface,
+        borderRadius: 24,
+        padding: 18,
+        borderWidth: 1,
+        borderColor: 'rgba(17,17,17,0.08)',
+    },
+    title: {
+        color: colors.text,
+        fontSize: 24,
+        fontWeight: '700',
+        lineHeight: 28,
+    },
+    location: {
+        marginTop: 6,
+        color: colors.accent,
+        fontSize: 13,
+        fontWeight: '700',
+    },
+    sectionTitle: {
+        marginTop: 16,
+        color: colors.text,
+        fontSize: 15,
+        fontWeight: '700',
+    },
+    description: {
+        marginTop: 8,
+        color: colors.muted,
+        fontSize: 13,
+        lineHeight: 21,
+    },
+    infoRow: {
+        flexDirection: 'row',
+        gap: 10,
+        marginTop: 16,
+    },
+    infoBox: {
+        flex: 1,
+        backgroundColor: 'rgba(17,17,17,0.03)',
+        borderRadius: 16,
+        padding: 12,
+        borderWidth: 1,
+        borderColor: 'rgba(17,17,17,0.08)',
+    },
+    infoLabel: {
+        color: colors.muted,
+        fontSize: 11,
+        marginBottom: 2,
+    },
+    infoValue: {
+        color: colors.text,
+        fontSize: 13,
+        fontWeight: '700',
+    },
+    button: {
+        marginTop: 16,
+        borderRadius: 14,
+    },
+    buttonContent: {
+        height: 50,
+    },
+    emptyWrap: {
+        flex: 1,
+        paddingHorizontal: 16,
+        paddingTop: 24,
+    },
+    emptyCard: {
+        backgroundColor: colors.surface,
+        borderRadius: 24,
+        padding: 22,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderWidth: 1,
+        borderColor: 'rgba(17,17,17,0.08)',
+        minHeight: 220,
+    },
+    emptyTitle: {
+        marginTop: 12,
+        color: colors.text,
+        fontSize: 18,
+        fontWeight: '700',
+        textAlign: 'center',
+    },
+    emptyText: {
+        marginTop: 8,
+        color: colors.muted,
+        fontSize: 12,
+        lineHeight: 18,
+        textAlign: 'center',
+    },
+});
