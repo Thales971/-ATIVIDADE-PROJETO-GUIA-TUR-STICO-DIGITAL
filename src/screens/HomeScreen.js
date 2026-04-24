@@ -1,9 +1,10 @@
 import React from 'react';
-import { FlatList, Image, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
+import { FlatList, Pressable, StyleSheet, Text, View, useWindowDimensions } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import { Feather } from '@expo/vector-icons';
 
 import { getLocalPlaces } from '../../data/placesRepository';
+import RemotePlaceImage from '../components/RemotePlaceImage';
 
 const colors = {
     background: '#d9d1d0',
@@ -58,22 +59,22 @@ export default function HomeScreen({ navigation, category = 'pontos', title }) {
         </View>
     );
 
-    const renderItem = ({ item }) => (
+    const renderItem = ({ item, index }) => (
         <View style={styles.gridItem}>
             <Pressable
                 style={({ pressed }) => [styles.card, pressed && styles.cardPressed]}
                 onPress={() => openDetails(item)}>
-                <Image source={{ uri: item.imagem }} style={styles.cardImage} />
+                <RemotePlaceImage
+                    uri={item.imagem}
+                    category={category}
+                    name={item.nome}
+                    seed={item.id}
+                    ordinal={index}
+                    style={styles.cardVisual}
+                />
 
                 <View style={styles.cardBody}>
                     <View style={styles.cardTopRow}>
-                        <View style={styles.badge}>
-                            <Feather
-                                name={category === 'restaurantes' ? 'coffee' : 'map'}
-                                size={12}
-                                color={colors.text}
-                            />
-                        </View>
                         <Text style={styles.cardLocation} numberOfLines={1}>
                             {item.localizacao}
                         </Text>
@@ -186,7 +187,7 @@ const styles = StyleSheet.create({
         opacity: 0.95,
         transform: [{ scale: 0.995 }],
     },
-    cardImage: {
+    cardVisual: {
         width: '100%',
         height: 180,
     },
@@ -196,21 +197,10 @@ const styles = StyleSheet.create({
     cardTopRow: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'flex-end',
         marginBottom: 8,
     },
-    badge: {
-        width: 28,
-        height: 28,
-        alignItems: 'center',
-        justifyContent: 'center',
-        borderRadius: 14,
-        backgroundColor: 'rgba(17,17,17,0.06)',
-    },
     cardLocation: {
-        flex: 1,
-        paddingLeft: 8,
-        textAlign: 'right',
         color: colors.accent,
         fontSize: 11,
         fontWeight: '700',

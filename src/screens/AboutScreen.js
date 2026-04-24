@@ -21,7 +21,7 @@ const items = [
     {
         icon: 'image',
         title: 'Visual curado',
-        text: 'As imagens seguem uma linha simples para nao poluir a leitura.',
+        text: 'As imagens usam fotos reais externas para manter cada card mais coerente.',
     },
     {
         icon: 'sliders',

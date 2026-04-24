@@ -1,8 +1,9 @@
 import React from 'react';
-import { Image, ScrollView, StyleSheet, Text, View } from 'react-native';
+import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import { Button, Chip, IconButton } from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
+import RemotePlaceImage from '../components/RemotePlaceImage';
 
 const colors = {
     background: '#d9d1d0',
@@ -83,7 +84,14 @@ export default function DetailsScreen({ navigation, route }) {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.scrollContent}>
                 <View style={styles.hero}>
-                    <Image source={{ uri: place.imagem }} style={styles.heroImage} />
+                    <RemotePlaceImage
+                        uri={place.imagem}
+                        category={place.categoria}
+                        name={place.nome}
+                        seed={place.id}
+                        ordinal={0}
+                        style={styles.heroVisual}
+                    />
                     <Chip mode='outlined' style={styles.heroChip} textStyle={styles.heroChipText}>
                         {categoryLabel}
                     </Chip>
@@ -150,7 +158,7 @@ const styles = StyleSheet.create({
         overflow: 'hidden',
         backgroundColor: colors.surface,
     },
-    heroImage: {
+    heroVisual: {
         width: '100%',
         height: 260,
     },
