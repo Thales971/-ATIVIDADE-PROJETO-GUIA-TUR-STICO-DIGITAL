@@ -26,6 +26,227 @@ const CATEGORY_CONFIG = {
     },
 };
 
+const RESTAURANT_PREFIXES = [
+    'Bistro',
+    'Casa',
+    'Cantina',
+    'Varanda',
+    'Mesa',
+    'Sabor',
+    'Fogao',
+    'Atelie',
+    'Rota',
+    'Canto',
+];
+
+const RESTAURANT_AREAS = [
+    {
+        label: 'do Centro',
+        location: 'Centro',
+        vibe: 'ambiente pratico para uma pausa no meio do passeio',
+    },
+    {
+        label: 'da Praca',
+        location: 'Praca Central',
+        vibe: 'clima de encontro com refeicao sem pressa',
+    },
+    {
+        label: 'da Orla',
+        location: 'Orla',
+        vibe: 'vista aberta e permanencia mais tranquila',
+    },
+];
+
+const RESTAURANT_CUISINES = [
+    { key: 'cafe', label: 'cafes, lanches e sobremesas leves' },
+    { key: 'pizza', label: 'pizzas artesanais e massas simples' },
+    { key: 'seafood', label: 'frutos do mar e peixes frescos' },
+    { key: 'grill', label: 'grelhados e pratos mais robustos' },
+    { key: 'default', label: 'cozinha caseira e pratos do dia' },
+];
+
+function normalizeText(value) {
+    return typeof value === 'string' ? value.toLowerCase() : '';
+}
+
+function getPointImageTags(name) {
+    const normalizedName = normalizeText(name);
+
+    if (/parque|jardim|bosque|trilha/.test(normalizedName)) {
+        return { leisure: 'park' };
+    }
+
+    if (/museu|biblioteca/.test(normalizedName)) {
+        return { tourism: 'museum' };
+    }
+
+    if (/mirante|vista|passarela|ponte|orla|ilha|marina/.test(normalizedName)) {
+        return { tourism: 'viewpoint' };
+    }
+
+    if (/centro historico|catedral|teatro|fortaleza|memorial|farol|estacao|portal/.test(normalizedName)) {
+        return { historic: 'yes' };
+    }
+
+    if (/praca|largo|mercado/.test(normalizedName)) {
+        return { leisure: 'garden' };
+    }
+
+    return {};
+}
+
+function buildPointDescription(place, index) {
+    const name = typeof place?.nome === 'string' && place.nome.trim() ? place.nome.trim() : `Ponto turistico ${index + 1}`;
+    const location =
+        typeof place?.localizacao === 'string' && place.localizacao.trim()
+            ? place.localizacao.trim()
+            : 'Localizacao nao informada';
+    const baseDescription = typeof place?.descricao === 'string' ? place.descricao.trim() : '';
+    const normalizedName = normalizeText(name);
+
+    let detail = 'O local ajuda a compor um roteiro curto, com leitura rapida e boa referencia visual.';
+
+    if (/parque|jardim|bosque|trilha/.test(normalizedName)) {
+        detail = 'A visita combina caminhada leve, pausa ao ar livre e fotos mais abertas.';
+    } else if (/museu|biblioteca/.test(normalizedName)) {
+        detail = 'A parada serve para contexto cultural, leitura rapida e observacao do acervo.';
+    } else if (/mirante|vista|passarela/.test(normalizedName)) {
+        detail = 'O destaque fica para a vista panoramica e para o percurso fotografico.';
+    } else if (/ponte/.test(normalizedName)) {
+        detail = 'A ponte funciona como ponto de passagem cenica e referencia urbana.';
+    } else if (/centro historico|catedral|teatro|fortaleza|memorial|farol|estacao|portal/.test(
+        normalizedName
+    )) {
+        detail = 'O local traz memoria da cidade, arquitetura marcante e parada curta no passeio.';
+    } else if (/mercado/.test(normalizedName)) {
+        detail = 'O mercado reforca a vida local, com circulacao constante e clima de visita pratica.';
+    } else if (/praca|largo/.test(normalizedName)) {
+        detail = 'A praca ou largo oferece area de descanso, encontro e observacao do movimento urbano.';
+    } else if (/orla|marina|ilha/.test(normalizedName)) {
+        detail = 'A area combina paisagem aberta, fotos e uma parada leve no roteiro.';
+    }
+
+    return `${baseDescription ? `${baseDescription} ` : ''}${name} fica em ${location} e ${detail}`.trim();
+}
+
+function buildRestaurantDescription(place, cuisineLabel, vibe, index) {
+    const name =
+        typeof place?.nome === 'string' && place.nome.trim() ? place.nome.trim() : `Restaurante ${index + 1}`;
+    const location =
+        typeof place?.localizacao === 'string' && place.localizacao.trim()
+            ? place.localizacao.trim()
+            : 'Localizacao nao informada';
+    const baseDescription = typeof place?.descricao === 'string' ? place.descricao.trim() : '';
+
+    return `${baseDescription ? `${baseDescription} ` : ''}${name} fica em ${location} e aposta em ${cuisineLabel}. ${vibe}. O cardapio foi pensado para servir bem sem complicar o passeio, com leitura rapida e parada agradavel.`.trim();
+}
+
+function buildPointImage(place, index) {
+    const name = typeof place?.nome === 'string' ? place.nome : '';
+    const tags = getPointImageTags(name);
+
+    if (typeof place?.imagem === 'string' && /^https?:\/\//i.test(place.imagem)) {
+        return place.imagem;
+    }
+
+    return getPlaceImage({
+        category: 'pontos',
+        tags,
+        name,
+        seed: place?.id || index,
+        ordinal: index,
+    });
+}
+
+function buildRestaurantImage(place, index, cuisineKey) {
+    const name = typeof place?.nome === 'string' ? place.nome : '';
+
+    if (typeof place?.imagem === 'string' && /^https?:\/\//i.test(place.imagem)) {
+        return place.imagem;
+    }
+
+    return getPlaceImage({
+        category: 'restaurantes',
+        tags: { cuisine: cuisineKey },
+        name,
+        seed: place?.id || index,
+        ordinal: index,
+    });
+}
+
+function buildGeneratedRestaurants() {
+    const generatedPlaces = [];
+    let index = 0;
+
+    for (const prefix of RESTAURANT_PREFIXES) {
+        for (const area of RESTAURANT_AREAS) {
+            const cuisine = RESTAURANT_CUISINES[index % RESTAURANT_CUISINES.length];
+            const name = `${prefix} ${area.label}`;
+            const seedPlace = {
+                id: `local-rest-${String(index + 1).padStart(2, '0')}`,
+                nome: name,
+                localizacao: area.location,
+                categoria: 'restaurantes',
+            };
+
+            generatedPlaces.push({
+                ...seedPlace,
+                descricao: buildRestaurantDescription(seedPlace, cuisine.label, area.vibe, index),
+                imagem: buildRestaurantImage(seedPlace, index, cuisine.key),
+            });
+
+            index += 1;
+        }
+    }
+
+    return generatedPlaces;
+}
+
+function buildLocalPointPlaces() {
+    const places = Array.isArray(placesData?.pontos) ? placesData.pontos : [];
+
+    return places.map((place, index) => ({
+        ...place,
+        descricao: buildPointDescription(place, index),
+        imagem: buildPointImage(place, index),
+    }));
+}
+
+function buildLocalRestaurantPlaces() {
+    const places = Array.isArray(placesData?.restaurantes) ? placesData.restaurantes : [];
+    const enrichedBasePlaces = places.map((place, index) => ({
+        ...place,
+        descricao: buildRestaurantDescription(
+            place,
+            RESTAURANT_CUISINES[index % RESTAURANT_CUISINES.length].label,
+            RESTAURANT_AREAS[index % RESTAURANT_AREAS.length].vibe,
+            index
+        ),
+        imagem: buildRestaurantImage(
+            place,
+            index,
+            RESTAURANT_CUISINES[index % RESTAURANT_CUISINES.length].key
+        ),
+    }));
+
+    const generatedPlaces = buildGeneratedRestaurants();
+
+    return [...enrichedBasePlaces, ...generatedPlaces].slice(0, 30);
+}
+
+export function getLocalPlaces(category) {
+    if (category === 'pontos') {
+        return buildLocalPointPlaces();
+    }
+
+    if (category === 'restaurantes') {
+        return buildLocalRestaurantPlaces();
+    }
+
+    const places = placesData?.[category];
+    return Array.isArray(places) ? places : [];
+}
+
 function getOverpassQueries(category, config) {
     if (category === 'pontos') {
         const tourismQuery = `
@@ -69,28 +290,6 @@ function getOverpassQueries(category, config) {
     }
 
     return [];
-}
-
-function getLocalPlaces(category) {
-    const places = placesData?.[category];
-    const localPlaces = Array.isArray(places) ? places : [];
-
-    return localPlaces.map((place, index) => {
-        const fallbackImage = getPlaceImage({
-            category,
-            name: place?.nome || '',
-            seed: place?.id || index,
-            ordinal: index,
-        });
-
-        return {
-            ...place,
-            imagem:
-                typeof place?.imagem === 'string' && /^https?:\/\//i.test(place.imagem)
-                    ? place.imagem
-                    : fallbackImage,
-        };
-    });
 }
 
 function getCoordinates(element) {
@@ -392,8 +591,8 @@ export async function loadPlaces(category) {
             const placeKey = `${String(place.nome || '')
                 .trim()
                 .toLowerCase()}::${String(place.localizacao || '')
-                .trim()
-                .toLowerCase()}`;
+                    .trim()
+                    .toLowerCase()}`;
 
             if (seenIds.has(place.id) || seenPlaceKeys.has(placeKey)) {
                 continue;

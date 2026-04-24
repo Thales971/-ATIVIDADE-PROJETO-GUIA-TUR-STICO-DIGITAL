@@ -27,7 +27,6 @@
 
 ## Extras implementados
 
-- [x] Tela de login/editorial extra
 - [x] Botao de favoritar na tela de detalhes
 - [x] Terceiro icone extra na navegação inferior como detalhe visual
 - [x] Melhorias visuais drasticas em Sobre e Contato
