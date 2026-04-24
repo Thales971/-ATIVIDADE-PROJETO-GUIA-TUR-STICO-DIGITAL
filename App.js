@@ -20,12 +20,12 @@ import ContactScreen from './src/screens/ContactScreen';
 const colors = {
     primary: '#111111',
     secondary: '#5f5858',
-    background: '#d9d1d0',
+    background: '#ffffff',
     surface: '#ffffff',
-    surfaceVariant: '#f3efef',
+    surfaceVariant: '#f4f4f4',
     text: '#111111',
     muted: '#676060',
-    border: '#cfc7c7',
+    border: '#d9d9d9',
     darkSurface: '#2f2a2a',
 };
 
@@ -72,17 +72,17 @@ function AppTabs() {
                 tabBarStyle: {
                     backgroundColor: colors.darkSurface,
                     borderTopColor: colors.darkSurface,
-                    height: 56,
-                    paddingBottom: 6,
-                    paddingTop: 6,
+                    height: 60,
+                    paddingBottom: 8,
+                    paddingTop: 8,
                 },
                 tabBarIcon: ({ color, size }) => {
                     const iconName =
                         route.name === 'Pontos Turísticos'
-                            ? 'home'
+                            ? 'star'
                             : route.name === 'Restaurantes'
-                                ? 'star'
-                                : 'send';
+                              ? 'send'
+                              : 'send';
 
                     return <Feather name={iconName} size={size} color={color} />;
                 },
@@ -126,7 +126,7 @@ export default function App() {
                                 drawerInactiveTintColor: colors.text,
                                 drawerActiveBackgroundColor: colors.darkSurface,
                                 drawerLabelStyle: {
-                                    fontWeight: '700',
+                                    fontWeight: '600',
                                 },
                                 drawerStyle: {
                                     backgroundColor: colors.background,
