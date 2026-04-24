@@ -39,9 +39,6 @@ export default function AboutScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.backgroundOrbTop} pointerEvents='none' />
-            <View style={styles.backgroundOrbBottom} pointerEvents='none' />
-
             <View style={styles.header}>
                 <IconButton
                     icon='menu'
@@ -49,72 +46,48 @@ export default function AboutScreen({ navigation }) {
                     iconColor={theme.colors.onSurface}
                     onPress={openDrawer}
                 />
-                <Text style={styles.brand}>BLACK CITY</Text>
-                <Feather name='info' size={24} color={theme.colors.onSurface} />
+
+                <View style={styles.headerCenter}>
+                    <View style={styles.brandRow}>
+                        <Text style={styles.brand}>BLACK CITY</Text>
+                        <View style={styles.cubeBox}>
+                            <Feather name='box' size={24} color={theme.colors.onSurface} />
+                        </View>
+                    </View>
+                    <Text style={styles.pageTitle}>SOBRE A EMPRESA</Text>
+                    <View style={styles.titleLine} />
+                </View>
+
+                <IconButton icon='dots-vertical' size={22} iconColor={theme.colors.onSurface} />
             </View>
 
             <ScrollView
                 style={styles.scroll}
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}>
-                <Surface style={styles.heroCard} elevation={1}>
-                    <Chip mode='outlined' style={styles.chip} textStyle={styles.chipText}>
-                        Beta
-                    </Chip>
-                    <Text style={styles.heroTitle}>Guia Turistico Digital</Text>
-                    <Text style={styles.heroText}>
-                        Uma base editorial para apresentar pontos turisticos, restaurantes e
-                        informacoes de contato com visual consistente e manutencao simples.
-                    </Text>
+                <Text style={styles.introText}>
+                    Bem-vindo ao Guia Turístico da Cidade, a sua bússola digital para explorar o que há de melhor por aqui!
+                    Nosso objetivo é transformar a maneira como moradores e turistas vivenciam a cidade.
+                    Com navegação simples, fotos detalhadas e localizações precisas, reunimos o essencial para facilitar cada passeio.
+                </Text>
 
-                    <View style={styles.heroStatsRow}>
-                        <View style={styles.heroStat}>
-                            <Text style={styles.heroStatValue}>OSM</Text>
-                            <Text style={styles.heroStatLabel}>Base de dados</Text>
-                        </View>
-                        <View style={styles.heroDivider} />
-                        <View style={styles.heroStat}>
-                            <Text style={styles.heroStatValue}>UI</Text>
-                            <Text style={styles.heroStatLabel}>Curadoria visual</Text>
-                        </View>
-                        <View style={styles.heroDivider} />
-                        <View style={styles.heroStat}>
-                            <Text style={styles.heroStatValue}>API</Text>
-                            <Text style={styles.heroStatLabel}>Flexivel</Text>
-                        </View>
-                    </View>
-                </Surface>
+                <Text style={styles.sectionText}>Desenvolvido por: Black City</Text>
+                <Text style={styles.bodyText}>
+                    Este aplicativo foi idealizado e desenvolvido com orgulho pela Black City, uma agência de tecnologia focada em criar soluções digitais que conectam pessoas, modernizam serviços e resolvem problemas reais.
+                </Text>
 
-                {highlights.map((item) => (
-                    <Surface key={item.title} style={styles.card} elevation={1}>
-                        <View style={styles.cardIcon}>
-                            <Feather name={item.icon} size={20} color={theme.colors.onSurface} />
-                        </View>
-                        <View style={styles.cardBody}>
-                            <Text style={styles.cardTitle}>{item.title}</Text>
-                            <Text style={styles.cardText}>{item.text}</Text>
-                        </View>
-                    </Surface>
-                ))}
+                <Text style={styles.sectionText}>Nossos pilares neste projeto:</Text>
+                <View style={styles.bulletList}>
+                    <Text style={styles.bulletItem}>• Inovação: Substituir guias de papel por uma experiência mobile interativa e fluida.</Text>
+                    <Text style={styles.bulletItem}>• Acessibilidade: Uma interface limpa, bonita e padronizada, para que qualquer pessoa consiga navegar sem dificuldades.</Text>
+                    <Text style={styles.bulletItem}>• Cultura Local: Dar visibilidade aos pontos turísticos e à gastronomia da nossa região.</Text>
+                </View>
 
-                <Surface style={styles.footerCard} elevation={1}>
-                    <Text style={styles.footerTitle}>Fonte e criterio visual</Text>
-                    <Text style={styles.footerText}>
-                        Os dados textuais vem de OpenStreetMap / Nominatim. As imagens sao tematicas
-                        e agrupadas por categoria para manter coerencia com o guia e evitar fotos
-                        aleatorias.
-                    </Text>
-                </Surface>
-
-                <Button
-                    mode='contained'
-                    buttonColor={theme.colors.onSurface}
-                    textColor={theme.colors.surface}
-                    style={styles.button}
-                    contentStyle={styles.buttonContent}
-                    onPress={() => navigation.navigate('Início')}>
-                    Voltar ao inicio
-                </Button>
+                <Text style={styles.sectionText}>Versão do Aplicativo</Text>
+                <Text style={styles.bodyText}>
+                    Versão: 1.0.0 (Beta)  Tecnologias: React Native & Expo
+                    {'\n'}Agradecemos por usar o nosso app. Pegue sua mochila, abra o mapa e aproveite a cidade!
+                </Text>
             </ScrollView>
         </View>
     );
@@ -125,6 +98,36 @@ const createStyles = (theme) =>
         container: {
             flex: 1,
             backgroundColor: theme.colors.background,
+        },
+        headerCenter: {
+            flex: 1,
+            alignItems: 'center',
+            paddingHorizontal: 8,
+        },
+        brandRow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+        },
+        cubeBox: {
+            width: 42,
+            height: 42,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        pageTitle: {
+            marginTop: 34,
+            textAlign: 'center',
+            fontSize: 23,
+            fontWeight: '600',
+            color: theme.colors.onSurface,
+        },
+        titleLine: {
+            width: 250,
+            height: 4,
+            marginTop: 16,
+            backgroundColor: theme.colors.onSurface,
+            borderRadius: 2,
         },
         backgroundOrbTop: {
             position: 'absolute',
@@ -162,121 +165,37 @@ const createStyles = (theme) =>
             flex: 1,
         },
         content: {
-            paddingHorizontal: 16,
+            paddingHorizontal: 24,
             paddingBottom: 28,
+            paddingTop: 26,
         },
-        heroCard: {
-            borderRadius: 24,
-            backgroundColor: theme.colors.surface,
-            padding: 20,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        chip: {
-            alignSelf: 'flex-start',
-            marginBottom: 14,
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            borderColor: 'rgba(17,17,17,0.1)',
-        },
-        chipText: {
-            fontSize: 10,
+        introText: {
             color: theme.colors.onSurface,
-        },
-        heroTitle: {
-            fontFamily: brandFont,
-            fontSize: 24,
-            color: theme.colors.onSurface,
-            marginBottom: 10,
-        },
-        heroText: {
-            color: theme.colors.onSurfaceVariant,
-            lineHeight: 20,
             fontSize: 13,
-        },
-        heroStatsRow: {
-            marginTop: 16,
-            paddingTop: 14,
-            borderTopWidth: 1,
-            borderTopColor: 'rgba(17,17,17,0.08)',
-            flexDirection: 'row',
-            alignItems: 'center',
-        },
-        heroStat: {
-            flex: 1,
-        },
-        heroStatValue: {
-            fontFamily: brandFont,
-            fontSize: 18,
-            color: theme.colors.onSurface,
-        },
-        heroStatLabel: {
-            marginTop: 2,
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 11,
-        },
-        heroDivider: {
-            width: 1,
-            height: 30,
-            backgroundColor: 'rgba(17,17,17,0.08)',
-        },
-        card: {
-            marginTop: 14,
-            borderRadius: 22,
-            backgroundColor: theme.colors.surface,
-            padding: 16,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-            flexDirection: 'row',
-            alignItems: 'flex-start',
-        },
-        cardIcon: {
-            width: 40,
-            height: 40,
-            borderRadius: 14,
-            alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(17,17,17,0.06)',
-            marginRight: 12,
-        },
-        cardBody: {
-            flex: 1,
-        },
-        cardTitle: {
-            color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 14,
-            marginBottom: 5,
-        },
-        cardText: {
-            color: theme.colors.onSurfaceVariant,
             lineHeight: 18,
-            fontSize: 12,
+            fontStyle: 'italic',
+            marginBottom: 18,
         },
-        footerCard: {
-            marginTop: 14,
-            borderRadius: 22,
-            backgroundColor: theme.colors.surface,
-            padding: 18,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        footerTitle: {
+        sectionText: {
             color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 15,
+            fontSize: 13,
+            fontStyle: 'italic',
+            marginTop: 6,
+            marginBottom: 2,
+        },
+        bodyText: {
+            color: theme.colors.onSurface,
+            fontSize: 13,
+            lineHeight: 18,
             marginBottom: 8,
         },
-        footerText: {
-            color: theme.colors.onSurfaceVariant,
+        bulletList: {
+            marginBottom: 12,
+        },
+        bulletItem: {
+            color: theme.colors.onSurface,
+            fontSize: 13,
             lineHeight: 18,
-            fontSize: 12,
-        },
-        button: {
-            marginTop: 16,
-            alignSelf: 'stretch',
-            borderRadius: 14,
-        },
-        buttonContent: {
-            height: 50,
+            marginBottom: 6,
         },
     });

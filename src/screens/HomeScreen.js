@@ -1,16 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, FlatList, Image, Platform, Pressable, StyleSheet, View } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
-import {
-    ActivityIndicator,
-    Button,
-    Card,
-    Chip,
-    IconButton,
-    Surface,
-    Text,
-    useTheme,
-} from 'react-native-paper';
+import { IconButton, Text, useTheme } from 'react-native-paper';
 import { Feather } from '@expo/vector-icons';
 
 import { loadPlaces } from '../../data/placesRepository';
@@ -23,20 +14,10 @@ const brandFont = Platform.select({
 
 const CATEGORY_META = {
     pontos: {
-        tag: 'Turismo urbano',
-        badge: 'OpenStreetMap + curadoria visual',
-        title: 'Pontos turisticos em destaque',
-        description:
-            'Imagens tematicas e locais selecionados para manter a leitura coerente com o guia.',
-        icon: 'map',
+        title: 'MELHORES PONTOS TURISTICOS DE BLACK CITY',
     },
     restaurantes: {
-        tag: 'Gastronomia',
-        badge: 'OpenStreetMap + curadoria visual',
-        title: 'Restaurantes escolhidos para o guia',
-        description:
-            'A lista usa dados de mapa, mas as imagens sao curadas para representar a categoria.',
-        icon: 'coffee',
+        title: 'MELHORES RESTAURANTES DE BLACK CITY',
     },
 };
 
@@ -73,8 +54,6 @@ export default function HomeScreen({ navigation, category, title }) {
         };
     }, [category]);
 
-    const featuredPlaces = places.slice(0, 6);
-
     const openDrawer = () => {
         const drawerNavigation =
             navigation.getParent?.()?.getParent?.() ?? navigation.getParent?.() ?? navigation;
@@ -93,65 +72,22 @@ export default function HomeScreen({ navigation, category, title }) {
     };
 
     const renderItem = ({ item, index }) => (
-        <Card mode='outlined' style={styles.card} onPress={() => openDetails(item)}>
-            <View style={styles.imageWrap}>
-                <Card.Cover source={{ uri: item.imagem }} style={styles.cover} />
-                <View style={styles.cardImageOverlay}>
-                    <Chip mode='outlined' style={styles.imageChip} textStyle={styles.imageChipText}>
-                        {item.categoria === 'restaurantes' ? 'Gastronomia' : 'Turismo'}
-                    </Chip>
-                </View>
+        <Pressable style={styles.placeRow} onPress={() => openDetails(item)}>
+            <View style={styles.placeTextColumn}>
+                <Text style={styles.placeTitle} numberOfLines={2}>
+                    {index + 1}. {item.nome}
+                </Text>
+                <Text style={styles.placeLocation}>Local: {item.localizacao}</Text>
+                <Text style={styles.placeLabel}>Descrição:</Text>
+                <Text style={styles.placeDescription}>{item.descricao}</Text>
             </View>
 
-            <Card.Content style={styles.cardContent}>
-                <View style={styles.cardTitleRow}>
-                    <View style={styles.cardTitleBlock}>
-                        <Text variant='titleLarge' style={styles.cardTitle} numberOfLines={2}>
-                            {item.nome}
-                        </Text>
-                        <Text variant='bodySmall' style={styles.cardSubtitle} numberOfLines={1}>
-                            {item.localizacao}
-                        </Text>
-                    </View>
-                    <Text style={styles.cardIndex}>{String(index + 1).padStart(2, '0')}</Text>
-                </View>
-
-                <Text variant='bodySmall' style={styles.cardDescription} numberOfLines={3}>
-                    {item.descricao}
-                </Text>
-
-                <View style={styles.cardMetaRow}>
-                    <Chip
-                        icon='map-marker-outline'
-                        mode='outlined'
-                        style={styles.chip}
-                        textStyle={styles.chipText}>
-                        {item.localizacao}
-                    </Chip>
-                    <Chip mode='outlined' style={styles.chipSoft} textStyle={styles.chipSoftText}>
-                        Imagem curada
-                    </Chip>
-                </View>
-            </Card.Content>
-
-            <Card.Actions style={styles.cardActions}>
-                <Button
-                    mode='contained'
-                    buttonColor={theme.colors.onSurface}
-                    textColor={theme.colors.surface}
-                    contentStyle={styles.cardButtonContent}
-                    onPress={() => openDetails(item)}>
-                    Ver detalhes
-                </Button>
-            </Card.Actions>
-        </Card>
+            <Image source={{ uri: item.imagem }} style={styles.placeImage} />
+        </Pressable>
     );
 
     return (
         <View style={styles.container}>
-            <View style={styles.backgroundOrbTop} pointerEvents='none' />
-            <View style={styles.backgroundOrbBottom} pointerEvents='none' />
-
             <View style={styles.header}>
                 <IconButton
                     icon='menu'
@@ -161,92 +97,27 @@ export default function HomeScreen({ navigation, category, title }) {
                 />
 
                 <View style={styles.headerCenter}>
-                    <Chip
-                        mode='outlined'
-                        style={styles.headerChip}
-                        textStyle={styles.headerChipText}>
-                        {meta.tag}
-                    </Chip>
-                    <Text style={styles.brand}>BLACK CITY</Text>
-                    <Text style={styles.headerSubtitle}>{title}</Text>
+                    <View style={styles.brandRow}>
+                        <Text style={styles.brand}>BLACK CITY</Text>
+                        <View style={styles.cubeBox}>
+                            <Feather name='box' size={24} color={theme.colors.onSurface} />
+                        </View>
+                    </View>
+                    <Text style={styles.headerTitle}>{meta.title}</Text>
+                    <View style={styles.headerLine} />
                 </View>
 
-                <View style={styles.headerIconFrame}>
-                    <Feather name={meta.icon} size={22} color={theme.colors.onSurface} />
-                </View>
+                <IconButton icon='dots-vertical' size={22} iconColor={theme.colors.onSurface} />
             </View>
 
-            <Surface style={styles.heroCard} elevation={1}>
-                <View style={styles.heroTopRow}>
-                    <Chip mode='outlined' style={styles.heroChip} textStyle={styles.heroChipText}>
-                        {meta.badge}
-                    </Chip>
-                    <Chip mode='outlined' style={styles.heroChip} textStyle={styles.heroChipText}>
-                        {loading ? 'Sincronizando' : `${places.length} itens`}
-                    </Chip>
-                </View>
-
-                <Text style={styles.heroTitle}>{meta.title}</Text>
-                <Text style={styles.heroText}>{meta.description}</Text>
-
-                <View style={styles.heroStatsRow}>
-                    <View style={styles.heroStat}>
-                        <Text style={styles.heroStatValue}>{loading ? '--' : places.length}</Text>
-                        <Text style={styles.heroStatLabel}>Itens exibidos</Text>
-                    </View>
-                    <View style={styles.heroDivider} />
-                    <View style={styles.heroStat}>
-                        <Text style={styles.heroStatValue}>OSM</Text>
-                        <Text style={styles.heroStatLabel}>Dados base</Text>
-                    </View>
-                </View>
-            </Surface>
-
-            {!loading && featuredPlaces.length > 0 ? (
-                <View style={styles.featuredSection}>
-                    <View style={styles.featuredHeader}>
-                        <Text style={styles.featuredTitle}>Destaques</Text>
-                        <Text style={styles.featuredSubtitle}>
-                            Rolagem lateral para explorar rapido
-                        </Text>
-                    </View>
-
-                    <ScrollView
-                        horizontal
-                        showsHorizontalScrollIndicator={false}
-                        contentContainerStyle={styles.featuredRail}>
-                        {featuredPlaces.map((item, index) => (
-                            <Card
-                                key={`${item.id}-${index}`}
-                                mode='outlined'
-                                style={styles.featuredCardItem}
-                                onPress={() => openDetails(item)}>
-                                <Card.Cover
-                                    source={{ uri: item.imagem }}
-                                    style={styles.featuredCover}
-                                />
-                                <Card.Content style={styles.featuredCardContent}>
-                                    <Text style={styles.featuredCardTitle} numberOfLines={1}>
-                                        {item.nome}
-                                    </Text>
-                                    <Text style={styles.featuredCardText} numberOfLines={2}>
-                                        {item.localizacao}
-                                    </Text>
-                                </Card.Content>
-                            </Card>
-                        ))}
-                    </ScrollView>
-                </View>
-            ) : null}
-
-            <Text style={styles.pageHint}>
-                Selecione um cartao para abrir a pagina de detalhes.
-            </Text>
+            <View style={styles.introBlock}>
+                <Text style={styles.introTitle}>{meta.title}</Text>
+            </View>
 
             {loading ? (
                 <View style={styles.center}>
                     <ActivityIndicator size='large' color={theme.colors.onSurface} />
-                    <Text variant='bodySmall' style={styles.loadingText}>
+                    <Text style={styles.loadingText}>
                         Carregando dados...
                     </Text>
                 </View>
@@ -258,10 +129,10 @@ export default function HomeScreen({ navigation, category, title }) {
                     contentContainerStyle={styles.listContent}
                     ListEmptyComponent={
                         <View style={styles.emptyState}>
-                            <Text variant='titleMedium' style={styles.emptyTitle}>
+                            <Text style={styles.emptyTitle}>
                                 Nenhum item disponivel.
                             </Text>
-                            <Text variant='bodySmall' style={styles.emptyText}>
+                            <Text style={styles.emptyText}>
                                 Verifique o JSON local ou a funcao de carregamento.
                             </Text>
                         </View>
@@ -278,204 +149,121 @@ const createStyles = (theme) =>
         container: {
             flex: 1,
             backgroundColor: theme.colors.background,
-            paddingBottom: 10,
-        },
-        backgroundOrbTop: {
-            position: 'absolute',
-            top: -26,
-            right: -34,
-            width: 180,
-            height: 180,
-            borderRadius: 90,
-            backgroundColor: 'rgba(255,255,255,0.16)',
-        },
-        backgroundOrbBottom: {
-            position: 'absolute',
-            left: -54,
-            bottom: 80,
-            width: 190,
-            height: 190,
-            borderRadius: 95,
-            backgroundColor: 'rgba(255,255,255,0.1)',
         },
         header: {
             flexDirection: 'row',
             alignItems: 'center',
             justifyContent: 'space-between',
-            paddingHorizontal: 10,
+            paddingHorizontal: 8,
             paddingTop: 10,
             paddingBottom: 8,
         },
         headerCenter: {
             flex: 1,
             alignItems: 'center',
-            paddingHorizontal: 10,
+            paddingHorizontal: 8,
         },
-        headerChip: {
-            marginBottom: 6,
-            backgroundColor: 'rgba(255,255,255,0.4)',
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        headerChipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
+        brandRow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
         },
         brand: {
             fontFamily: brandFont,
             fontSize: 24,
-            letterSpacing: 0.9,
+            letterSpacing: 0.8,
             color: theme.colors.onSurface,
             textAlign: 'center',
         },
-        headerSubtitle: {
-            marginTop: 2,
-            fontSize: 12,
-            color: theme.colors.onSurfaceVariant,
-            textAlign: 'center',
-        },
-        headerIconFrame: {
-            width: 38,
-            height: 38,
-            borderRadius: 12,
+        cubeBox: {
+            width: 42,
+            height: 42,
             alignItems: 'center',
             justifyContent: 'center',
-            backgroundColor: 'rgba(255,255,255,0.28)',
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
         },
-        heroCard: {
-            marginHorizontal: 16,
-            marginTop: 2,
-            borderRadius: 24,
-            paddingHorizontal: 18,
-            paddingVertical: 18,
-            backgroundColor: theme.colors.surface,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        heroTopRow: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            gap: 10,
-            marginBottom: 14,
-        },
-        heroChip: {
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        heroChipText: {
-            fontSize: 10,
+        headerTitle: {
+            marginTop: 34,
+            maxWidth: 300,
+            textAlign: 'center',
+            fontSize: 23,
+            fontWeight: '600',
             color: theme.colors.onSurface,
         },
-        heroTitle: {
-            fontFamily: brandFont,
-            fontSize: 22,
-            color: theme.colors.onSurface,
-            marginBottom: 10,
-        },
-        heroText: {
-            color: theme.colors.onSurfaceVariant,
-            lineHeight: 20,
-            fontSize: 13,
-        },
-        heroStatsRow: {
+        headerLine: {
+            width: 250,
+            height: 4,
             marginTop: 16,
-            paddingTop: 14,
-            borderTopWidth: 1,
-            borderTopColor: 'rgba(17,17,17,0.08)',
-            flexDirection: 'row',
-            alignItems: 'center',
+            backgroundColor: theme.colors.onSurface,
+            borderRadius: 2,
         },
-        heroStat: {
+        introBlock: {
+            alignItems: 'center',
+            paddingHorizontal: 18,
+            paddingTop: 14,
+        },
+        introTitle: {
+            display: 'none',
+        },
+        placeRow: {
+            flexDirection: 'row',
+            alignItems: 'flex-start',
+            gap: 16,
+            marginBottom: 54,
+        },
+        placeTextColumn: {
             flex: 1,
         },
-        heroStatValue: {
-            fontFamily: brandFont,
-            fontSize: 18,
+        placeTitle: {
             color: theme.colors.onSurface,
+            fontSize: 20,
+            fontWeight: '600',
+            lineHeight: 24,
+            marginBottom: 2,
         },
-        heroStatLabel: {
-            marginTop: 2,
+        placeLocation: {
             color: theme.colors.onSurfaceVariant,
-            fontSize: 11,
+            fontSize: 12,
+            marginBottom: 2,
         },
-        heroDivider: {
-            width: 1,
-            height: 30,
-            backgroundColor: 'rgba(17,17,17,0.08)',
-        },
-        featuredSection: {
-            marginTop: 8,
-            paddingHorizontal: 16,
-        },
-        featuredHeader: {
-            flexDirection: 'row',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            marginBottom: 10,
-            paddingHorizontal: 2,
-        },
-        featuredTitle: {
-            fontFamily: brandFont,
-            fontSize: 16,
+        placeLabel: {
             color: theme.colors.onSurface,
+            fontSize: 12,
+            fontWeight: '700',
         },
-        featuredSubtitle: {
-            fontSize: 11,
-            color: theme.colors.onSurfaceVariant,
-        },
-        featuredRail: {
-            gap: 12,
-            paddingBottom: 4,
-            paddingRight: 8,
-        },
-        featuredCardItem: {
-            width: 158,
-            borderRadius: 20,
-            overflow: 'hidden',
-            backgroundColor: theme.colors.surface,
-            borderColor: 'rgba(17,17,17,0.08)',
-            borderWidth: 1,
-        },
-        featuredCover: {
-            height: 120,
-        },
-        featuredCardContent: {
-            paddingTop: 10,
-            paddingBottom: 12,
-        },
-        featuredCardTitle: {
-            fontFamily: brandFont,
+        placeDescription: {
             color: theme.colors.onSurface,
             fontSize: 14,
-            marginBottom: 4,
+            lineHeight: 19,
         },
-        featuredCardText: {
-            color: theme.colors.onSurfaceVariant,
-            fontSize: 11,
-            lineHeight: 15,
+        placeImage: {
+            width: 150,
+            height: 195,
+            borderRadius: 28,
+            backgroundColor: theme.colors.surfaceVariant,
         },
-        pageHint: {
-            paddingHorizontal: 20,
-            paddingTop: 10,
-            paddingBottom: 10,
-            fontSize: 12,
+        loadingText: {
+            marginTop: 10,
             color: theme.colors.onSurfaceVariant,
+        },
+        emptyTitle: {
+            color: theme.colors.onSurface,
+            fontSize: 15,
+            fontWeight: '700',
+        },
+        emptyText: {
+            color: theme.colors.onSurfaceVariant,
+            marginTop: 6,
+        },
+        listContent: {
+            paddingHorizontal: 18,
+            paddingTop: 36,
+            paddingBottom: 30,
         },
         center: {
             flex: 1,
             alignItems: 'center',
             justifyContent: 'center',
             padding: 24,
-        },
-        loadingText: {
-            marginTop: 10,
-            color: theme.colors.onSurfaceVariant,
-        },
-        listContent: {
-            paddingHorizontal: 16,
-            paddingTop: 4,
-            paddingBottom: 28,
         },
         card: {
             marginBottom: 18,
@@ -574,14 +362,11 @@ const createStyles = (theme) =>
             justifyContent: 'center',
             paddingVertical: 48,
         },
-        emptyTitle: {
-            textAlign: 'center',
-            color: theme.colors.onSurface,
-        },
-        emptyText: {
-            marginTop: 6,
-            textAlign: 'center',
+        pageHint: {
+            paddingHorizontal: 20,
+            paddingTop: 10,
+            paddingBottom: 10,
+            fontSize: 12,
             color: theme.colors.onSurfaceVariant,
-            maxWidth: 260,
         },
     });

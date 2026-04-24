@@ -43,9 +43,6 @@ export default function ContactScreen({ navigation }) {
 
     return (
         <View style={styles.container}>
-            <View style={styles.backgroundOrbTop} pointerEvents='none' />
-            <View style={styles.backgroundOrbBottom} pointerEvents='none' />
-
             <View style={styles.header}>
                 <IconButton
                     icon='menu'
@@ -53,55 +50,41 @@ export default function ContactScreen({ navigation }) {
                     iconColor={theme.colors.onSurface}
                     onPress={openDrawer}
                 />
-                <Text style={styles.brand}>BLACK CITY</Text>
-                <Feather name='send' size={22} color={theme.colors.onSurface} />
+
+                <View style={styles.headerCenter}>
+                    <View style={styles.brandRow}>
+                        <Text style={styles.brand}>BLACK CITY</Text>
+                        <View style={styles.cubeBox}>
+                            <Feather name='box' size={24} color={theme.colors.onSurface} />
+                        </View>
+                    </View>
+                    <Text style={styles.pageTitle}>CONTATOS DA EMPRESA</Text>
+                    <View style={styles.titleLine} />
+                </View>
+
+                <IconButton icon='dots-vertical' size={22} iconColor={theme.colors.onSurface} />
             </View>
 
             <ScrollView
                 style={styles.scroll}
                 contentContainerStyle={styles.content}
                 showsVerticalScrollIndicator={false}>
-                <Surface style={styles.heroCard} elevation={1}>
-                    <Chip mode='outlined' style={styles.chip} textStyle={styles.chipText}>
-                        Atendimento
-                    </Chip>
-                    <Text style={styles.heroTitle}>Contato rapido</Text>
-                    <Text style={styles.heroText}>
-                        Use este canal para falar sobre ajustes visuais, revisao de conteudo,
-                        duvidas da base de dados e proximas evolucoes do guia.
-                    </Text>
-                </Surface>
+                <Text style={styles.sectionTitle}>Fale Conosco</Text>
 
-                {contactItems.map((item) => (
-                    <Surface key={item.title} style={styles.card} elevation={1}>
-                        <View style={styles.cardIcon}>
-                            <Feather name={item.icon} size={20} color={theme.colors.onSurface} />
-                        </View>
-                        <View style={styles.cardBody}>
-                            <Text style={styles.cardTitle}>{item.title}</Text>
-                            <Text style={styles.cardValue}>{item.value}</Text>
-                            <Text style={styles.cardText}>{item.text}</Text>
-                        </View>
-                    </Surface>
-                ))}
+                <View style={styles.socialRow}>
+                    <Feather name='mail' size={54} color={theme.colors.onSurface} />
+                    <Feather name='facebook' size={52} color={theme.colors.onSurface} />
+                    <Feather name='instagram' size={52} color={theme.colors.onSurface} />
+                </View>
 
-                <Surface style={styles.footerCard} elevation={1}>
-                    <Text style={styles.footerTitle}>Pronto para receber mensagens</Text>
-                    <Text style={styles.footerText}>
-                        Se precisar ajustar imagens, textos ou a navegacao, este e o ponto de
-                        contato mais rapido do projeto.
-                    </Text>
-                </Surface>
+                <Text style={styles.bodyText}>
+                    Ficou com alguma dúvida, encontrou um bug no aplicativo ou quer sugerir um novo ponto turístico e restaurante para o nosso guia? A equipe da Black City está pronta para ouvir você! Sua opinião é fundamental para continuarmos melhorando a experiência do turismo na nossa cidade.
+                </Text>
 
-                <Button
-                    mode='contained'
-                    buttonColor={theme.colors.onSurface}
-                    textColor={theme.colors.surface}
-                    style={styles.button}
-                    contentStyle={styles.buttonContent}
-                    onPress={() => {}}>
-                    Enviar mensagem
-                </Button>
+                <Text style={styles.sectionText}>Canais de Atendimento</Text>
+                <Text style={styles.bodyText}>• E-mail: suporte@blackcity.dev.br</Text>
+                <Text style={styles.bodyText}>• WhatsApp: (00) 91234-5678 (Atendimento de Seg. a Sex, das 9h às 18h)</Text>
+                <Text style={styles.bodyText}>• Site Oficial: www.blackcity.dev.br</Text>
             </ScrollView>
         </View>
     );
@@ -112,6 +95,36 @@ const createStyles = (theme) =>
         container: {
             flex: 1,
             backgroundColor: theme.colors.background,
+        },
+        headerCenter: {
+            flex: 1,
+            alignItems: 'center',
+            paddingHorizontal: 8,
+        },
+        brandRow: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: 12,
+        },
+        cubeBox: {
+            width: 42,
+            height: 42,
+            alignItems: 'center',
+            justifyContent: 'center',
+        },
+        pageTitle: {
+            marginTop: 34,
+            textAlign: 'center',
+            fontSize: 23,
+            fontWeight: '600',
+            color: theme.colors.onSurface,
+        },
+        titleLine: {
+            width: 250,
+            height: 4,
+            marginTop: 16,
+            backgroundColor: theme.colors.onSurface,
+            borderRadius: 2,
         },
         backgroundOrbTop: {
             position: 'absolute',
@@ -149,101 +162,36 @@ const createStyles = (theme) =>
             flex: 1,
         },
         content: {
-            paddingHorizontal: 16,
+            paddingHorizontal: 24,
             paddingBottom: 28,
+            paddingTop: 26,
         },
-        heroCard: {
-            borderRadius: 24,
-            backgroundColor: theme.colors.surface,
-            padding: 20,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        chip: {
-            alignSelf: 'flex-start',
+        sectionTitle: {
+            color: theme.colors.onSurface,
+            fontSize: 22,
+            fontWeight: '600',
             marginBottom: 14,
-            backgroundColor: 'rgba(17,17,17,0.03)',
-            borderColor: 'rgba(17,17,17,0.1)',
         },
-        chipText: {
-            fontSize: 10,
-            color: theme.colors.onSurface,
-        },
-        heroTitle: {
-            fontFamily: brandFont,
-            fontSize: 24,
-            color: theme.colors.onSurface,
-            marginBottom: 10,
-        },
-        heroText: {
-            color: theme.colors.onSurfaceVariant,
-            lineHeight: 20,
-            fontSize: 13,
-        },
-        card: {
-            marginTop: 14,
-            borderRadius: 22,
-            backgroundColor: theme.colors.surface,
-            padding: 16,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
+        socialRow: {
             flexDirection: 'row',
-            alignItems: 'flex-start',
-        },
-        cardIcon: {
-            width: 40,
-            height: 40,
-            borderRadius: 14,
+            justifyContent: 'space-between',
             alignItems: 'center',
-            justifyContent: 'center',
-            backgroundColor: 'rgba(17,17,17,0.06)',
-            marginRight: 12,
+            marginBottom: 18,
+            paddingRight: 10,
         },
-        cardBody: {
-            flex: 1,
-        },
-        cardTitle: {
-            color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 14,
-            marginBottom: 2,
-        },
-        cardValue: {
+        bodyText: {
             color: theme.colors.onSurface,
             fontSize: 13,
-            fontWeight: '700',
-            marginBottom: 4,
-        },
-        cardText: {
-            color: theme.colors.onSurfaceVariant,
             lineHeight: 18,
-            fontSize: 12,
+            marginBottom: 10,
+            fontStyle: 'italic',
         },
-        footerCard: {
-            marginTop: 14,
-            borderRadius: 22,
-            backgroundColor: theme.colors.surface,
-            padding: 18,
-            borderWidth: 1,
-            borderColor: 'rgba(17,17,17,0.08)',
-        },
-        footerTitle: {
+        sectionText: {
             color: theme.colors.onSurface,
-            fontFamily: brandFont,
-            fontSize: 15,
-            marginBottom: 8,
-        },
-        footerText: {
-            color: theme.colors.onSurfaceVariant,
+            fontSize: 13,
             lineHeight: 18,
-            fontSize: 12,
-        },
-        button: {
-            marginTop: 16,
-            alignSelf: 'stretch',
-            borderRadius: 14,
-        },
-        buttonContent: {
-            height: 50,
+            marginTop: 6,
+            marginBottom: 2,
+            fontStyle: 'italic',
         },
     });
